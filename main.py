@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
 from src.routes.oauth import router as oauth_router
+from src.routes.user import router as user_router
 from src.dto.responses import HealthCheckResponse
 
 def custom_openapi():
@@ -23,6 +24,10 @@ def custom_openapi():
             {
                 "name": "Authentication",
                 "description": "Endpoints para autenticação e gerenciamento de usuários"
+            },
+            {
+                "name": "User",
+                "description": "Endpoints protegidos para gerenciamento do usuário autenticado"
             }
         ]
     )
@@ -74,6 +79,7 @@ def create_app() -> FastAPI:
         Endpoint de health check para verificar se a API está online e funcionando.
 
         Retorna um status simples indicando que a aplicação está operacional.
+    app.include_router(user_router, prefix="/api/v1/user", tags=["User"])
         """
         return {"status": "ok"}
 
