@@ -2,7 +2,7 @@ from src.domain.entities.User import User
 from src.domain.usecase.interfaces.IEncrypt_password import IEncryptPassword
 from src.domain.usecase.interfaces.IGetUserByEmail import IGetUserByEmail
 from src.domain.usecase.interfaces.ISaveUser import ISaveUser
-from src.dto.signup import CreateUserDTO
+from src.dto.createUserDTO import CreateUserDTO
 import uuid
 from datetime import datetime
 

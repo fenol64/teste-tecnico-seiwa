@@ -15,6 +15,10 @@ def custom_openapi():
         title="API Seiwa - Teste Técnico",
         version="1.0.0",
         description="API RESTful desenvolvida com FastAPI, PostgreSQL e Clean Architecture. Inclui autenticação de usuários, gerenciamento de dados e operações CRUD completas.",
+        servers=[
+            {"url": "http://localhost:8000", "description": "Servidor Local"},
+            {"url": "https://api-seiwa.fenol64.com.br", "description": "Servidor de Produção"}
+        ],
         routes=app.routes,
         tags=[
             {
@@ -32,9 +36,6 @@ def custom_openapi():
         ]
     )
 
-    openapi_schema["info"]["x-logo"] = {
-        "url": "https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"
-    }
 
     app.openapi_schema = openapi_schema
     return app.openapi_schema
@@ -79,11 +80,11 @@ def create_app() -> FastAPI:
         Endpoint de health check para verificar se a API está online e funcionando.
 
         Retorna um status simples indicando que a aplicação está operacional.
-    app.include_router(user_router, prefix="/api/v1/user", tags=["User"])
         """
         return {"status": "ok"}
 
     app.include_router(oauth_router, prefix="/api/v1", tags=["Authentication"])
+    app.include_router(user_router, prefix="/api/v1/user", tags=["User"])
 
     # Aplicar schema customizado do OpenAPI
     app.openapi = custom_openapi

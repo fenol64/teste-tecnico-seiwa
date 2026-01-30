@@ -4,7 +4,7 @@ from src.controller.oauth.signup import SignUpHandler
 from src.controller.oauth.signin import SignInHandler
 from src.domain.usecase.oauth.signup import SignUpUseCase
 from src.domain.usecase.oauth.signin import SignInUseCase
-from src.dto.signup import CreateUserDTO
+from src.dto.createUserDTO import CreateUserDTO
 from src.dto.signinDTO import SignInDTO
 from src.dto.responses import SignUpResponse, SignInResponse, ErrorResponse
 

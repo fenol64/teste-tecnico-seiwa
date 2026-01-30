@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from src.dto.signup import CreateUserDTO
+from src.dto.createUserDTO import CreateUserDTO
 from src.domain.usecase.oauth.signup import SignUpUseCase
 
 
