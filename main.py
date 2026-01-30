@@ -1,48 +1,29 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
 
-from src.bootstrap.container import Container
-from src.dto.signup import CreateUserDTO
-from src.controller.oauth.signup import SignUpHandler
-from src.infrastructure.database.connection import get_db
+from src.routes.oauth import router as oauth_router
 
-# Remover criação automática de tabelas - usar Alembic migrations
-# Base.metadata.create_all(bind=engine)
+def create_app() -> FastAPI:
+    app = FastAPI(
+        title="API teste tecnico da seiwa",
+        description="API inicial criada com FastAPI",
+        version="1.0.0"
+    )
 
-# Criar instância do FastAPI
-app = FastAPI(
-    title="API teste tecnico da seiwa",
-    description="API inicial criada com FastAPI",
-    version="1.0.0"
-)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
-# Configurar CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    @app.get("/health")
+    async def health_check():
+        return {"status": "ok"}
 
-# Rota raiz
-@app.get("/")
-async def root():
-    return {
-        "message": "Bem-vindo à API teste tecnico da seiwa!",
-        "docs": "/api/docs",
-    }
+    app.include_router(oauth_router, prefix="/api/v1")
 
-@app.post('/api/v1/signup')
-async def signup(user: CreateUserDTO, db: Session = Depends(get_db)):
-    container = Container(db=db)
-    handler = SignUpHandler(sign_up_usecase=container.signup_usecase)
-    return handler.handle(user)
+    return app
 
-
-# Rota de health check
-@app.get("/health")
-async def health_check():
-    return {"status": "ok"}
-
+app = create_app()
