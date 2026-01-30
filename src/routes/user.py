@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends, status
 from typing import Dict, Any
 
-from src.infrastructure.auth.dependencies import get_current_user, get_current_user_id
+from src.infrastructure.auth.dependencies import get_current_user
 from src.dto.responses import UserData
 
 router = APIRouter()
-
 
 @router.get(
     "/me",
