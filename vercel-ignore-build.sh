@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Este script é executado pela Vercel antes de cada build
-# Retorna 1 para IGNORAR o build, 0 para PROSSEGUIR com o build
+# ATENÇÃO: Na Vercel, exit 0 = IGNORA build, exit 1 = PROSSEGUE com build
+# (comportamento inverso do padrão)
 
 # Se não for a branch main ou master, ignora o build
 if [[ "$VERCEL_GIT_COMMIT_REF" != "main" && "$VERCEL_GIT_COMMIT_REF" != "master" ]]; then
   echo "🔸 Branch '$VERCEL_GIT_COMMIT_REF' não é main/master. Build ignorado."
-  exit 1
+  exit 0
 fi
 
 # Verifica o status do último workflow do GitHub Actions
@@ -37,10 +38,10 @@ while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
   if [ "$STATUS" = "completed" ]; then
     if [ "$CONCLUSION" = "success" ]; then
       echo "✅ Testes passaram! Prosseguindo com deploy..."
-      exit 0
+      exit 1  # exit 1 = PROSSEGUIR com build na Vercel
     elif [ "$CONCLUSION" = "failure" ] || [ "$CONCLUSION" = "cancelled" ]; then
       echo "❌ Testes falharam ou foram cancelados. Build ignorado."
-      exit 1
+      exit 0  # exit 0 = IGNORAR build na Vercel
     fi
   fi
 
@@ -50,4 +51,4 @@ while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
 done
 
 echo "⏱️ Timeout aguardando testes. Build ignorado por segurança."
-exit 1
+exit 0  # exit 0 = IGNORAR build na Vercel
