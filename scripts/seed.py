@@ -2,7 +2,7 @@ import os
 import sys
 import random
 from faker import Faker
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 
 # Add the project root to sys.path to allow imports from src
@@ -38,7 +38,7 @@ def seed():
                 name=fake.name(),
                 email=fake.unique.email(),
                 password=pwd_context.hash("123456"), # Default password
-                created_at=datetime.utcnow()
+                created_at=datetime.now(timezone.utc)
             )
             users.append(user)
         db.add_all(users)
@@ -51,7 +51,7 @@ def seed():
             hospital = HospitalModel(
                 name=fake.company() + " Hospital",
                 address=fake.address(),
-                created_at=datetime.utcnow()
+                created_at=datetime.now(timezone.utc)
             )
             hospitals.append(hospital)
         db.add_all(hospitals)
@@ -67,7 +67,7 @@ def seed():
                 specialty=fake.job(),
                 phone=fake.phone_number(),
                 email=fake.unique.email(),
-                created_at=datetime.utcnow()
+                created_at=datetime.now(timezone.utc)
             )
             doctors.append(doctor)
         db.add_all(doctors)
@@ -84,7 +84,7 @@ def seed():
                 relation = DoctorHospitalModel(
                     doctor_id=doctor.id,
                     hospital_id=hospital.id,
-                    created_at=datetime.utcnow()
+                    created_at=datetime.now(timezone.utc)
                 )
                 doctor_hospital_relations.append(relation)
         db.add_all(doctor_hospital_relations)
@@ -105,7 +105,7 @@ def seed():
                 type=prod_type,
                 date=fake.date_between(start_date='-1y', end_date='today'),
                 description=fake.sentence(),
-                created_at=datetime.utcnow()
+                created_at=datetime.now(timezone.utc)
             )
             productions.append(production)
 
@@ -124,7 +124,7 @@ def seed():
                 production_id=prod.id,
                 valor=Decimal(random.uniform(100.0, 5000.0)),
                 status=random.choice(list(RepasseStatus)),
-                created_at=datetime.utcnow()
+                created_at=datetime.now(timezone.utc)
             )
             repasses.append(repasse)
 

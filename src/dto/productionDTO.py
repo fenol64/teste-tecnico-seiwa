@@ -1,5 +1,5 @@
 import uuid
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from datetime import date as date_type
 from enum import Enum
 
@@ -17,8 +17,8 @@ class CreateProductionDTO(BaseModel):
     date: date_type = Field(..., description="Data da produção")
     description: str | None = Field(None, max_length=500, description="Descrição adicional (opcional)")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "doctor_id": "123e4567-e89b-12d3-a456-426614174000",
                 "hospital_id": "987e6543-e21b-12d3-a456-426614174999",
@@ -27,6 +27,7 @@ class CreateProductionDTO(BaseModel):
                 "description": "Plantão noturno no pronto socorro"
             }
         }
+    )
 
 
 class UpdateProductionDTO(BaseModel):
@@ -35,14 +36,15 @@ class UpdateProductionDTO(BaseModel):
     date: date_type | None = Field(None, description="Data da produção")
     description: str | None = Field(None, max_length=500, description="Descrição adicional")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "type": "consulta",
                 "date": "2026-01-31",
                 "description": "Consulta de rotina"
             }
         }
+    )
 
 
 class ProductionResponseDTO(BaseModel):
@@ -56,8 +58,8 @@ class ProductionResponseDTO(BaseModel):
     created_at: str
     updated_at: str | None = None
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
                 "doctor_id": "987e6543-e21b-12d3-a456-426614174999",
@@ -69,3 +71,4 @@ class ProductionResponseDTO(BaseModel):
                 "updated_at": None
             }
         }
+    )

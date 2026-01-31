@@ -1,5 +1,5 @@
 import uuid
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class CreateHospitalDTO(BaseModel):
@@ -7,13 +7,14 @@ class CreateHospitalDTO(BaseModel):
     name: str = Field(..., min_length=3, max_length=200, description="Nome do hospital")
     address: str = Field(..., min_length=5, max_length=300, description="Endereço completo do hospital")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "name": "Hospital Santa Casa",
                 "address": "Rua das Flores, 123 - Centro, São Paulo - SP"
             }
         }
+    )
 
 
 class UpdateHospitalDTO(BaseModel):
@@ -21,13 +22,14 @@ class UpdateHospitalDTO(BaseModel):
     name: str | None = Field(None, min_length=3, max_length=200, description="Nome do hospital")
     address: str | None = Field(None, min_length=5, max_length=300, description="Endereço completo do hospital")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "name": "Hospital Santa Casa",
                 "address": "Rua das Flores, 123 - Centro, São Paulo - SP"
             }
         }
+    )
 
 
 class HospitalResponseDTO(BaseModel):
@@ -38,8 +40,8 @@ class HospitalResponseDTO(BaseModel):
     created_at: str
     updated_at: str | None = None
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
                 "name": "Hospital Santa Casa",
@@ -48,3 +50,4 @@ class HospitalResponseDTO(BaseModel):
                 "updated_at": None
             }
         }
+    )

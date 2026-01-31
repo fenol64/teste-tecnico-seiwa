@@ -1,7 +1,7 @@
 """Unit tests for repositories"""
 import pytest
 from uuid import uuid4
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from decimal import Decimal
 
 from src.infrastructure.repositories.doctor_repository import DoctorRepository
@@ -33,7 +33,7 @@ class TestDoctorRepository:
             specialty=sample_doctor_data["specialty"],
             phone=sample_doctor_data["phone"],
             email=sample_doctor_data["email"],
-            created_at=datetime.utcnow().isoformat()
+            created_at=datetime.now(timezone.utc).isoformat()
         )
 
         result = repo.save(doctor)
@@ -116,7 +116,7 @@ class TestHospitalRepository:
             id=uuid4(),
             name=hospital_data["name"],
             address=hospital_data["address"],
-            created_at=datetime.utcnow().isoformat()
+            created_at=datetime.now(timezone.utc).isoformat()
         )
 
         result = repo.save(hospital)
@@ -156,7 +156,7 @@ class TestProductionRepository:
             type="plantao",
             date=date(2024, 1, 15),
             description="Test",
-            created_at=datetime.utcnow().isoformat()
+            created_at=datetime.now(timezone.utc).isoformat()
         )
 
         result = repo.save(production)

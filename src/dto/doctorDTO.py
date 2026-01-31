@@ -1,5 +1,5 @@
 import uuid
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, ConfigDict
 
 
 class CreateDoctorDTO(BaseModel):
@@ -10,8 +10,8 @@ class CreateDoctorDTO(BaseModel):
     phone: str | None = Field(None, max_length=20, description="Telefone do médico (opcional)")
     email: EmailStr = Field(..., description="Email do médico (deve ser válido)")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "name": "Dr. Carlos Mendes",
                 "crm": "123456",
@@ -20,6 +20,7 @@ class CreateDoctorDTO(BaseModel):
                 "email": "carlos.mendes@hospital.com"
             }
         }
+    )
 
 
 class UpdateDoctorDTO(BaseModel):
@@ -29,8 +30,8 @@ class UpdateDoctorDTO(BaseModel):
     phone: str | None = Field(None, max_length=20, description="Telefone do médico")
     email: EmailStr | None = Field(None, description="Email do médico")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "name": "Dr. Carlos Mendes",
                 "specialty": "Cardiologia",
@@ -38,6 +39,7 @@ class UpdateDoctorDTO(BaseModel):
                 "email": "carlos.mendes@hospital.com"
             }
         }
+    )
 
 
 class DoctorResponseDTO(BaseModel):
@@ -51,8 +53,8 @@ class DoctorResponseDTO(BaseModel):
     created_at: str
     updated_at: str | None = None
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
                 "name": "Dr. Carlos Mendes",
@@ -64,3 +66,4 @@ class DoctorResponseDTO(BaseModel):
                 "updated_at": None
             }
         }
+    )

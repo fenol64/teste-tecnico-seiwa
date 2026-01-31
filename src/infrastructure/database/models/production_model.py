@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, DateTime, Date, ForeignKey, Enum
 from sqlalchemy.dialects.postgresql import UUID
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 import enum
 
@@ -21,8 +21,8 @@ class ProductionModel(Base):
     type = Column(Enum(ProductionType), nullable=False)
     date = Column(Date, nullable=False)
     description = Column(String, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    updated_at = Column(DateTime, onupdate=lambda: datetime.now(timezone.utc))
 
     def __repr__(self):
         return f"<Production(id={self.id}, doctor_id={self.doctor_id}, type={self.type}, date={self.date})>"
