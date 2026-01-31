@@ -20,24 +20,33 @@ echo "📍 Commit: $COMMIT_SHA"
 MAX_ATTEMPTS=30
 ATTEMPT=0
 
-
 while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
   # Busca o status dos checks do commit
-  STATUS=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-    "https://api.github.com/repos/$REPO/commits/$COMMIT_SHA/check-runs" | \
-    grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
+  RESPONSE=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+    "https://api.github.com/repos/$REPO/commits/$COMMIT_SHA/check-runs")
+
+  echo "📡 Resposta da API (tentativa $((ATTEMPT + 1))/$MAX_ATTEMPTS):"
+  echo "$RESPONSE" | head -20
+
+  # Extrai o status e conclusion usando sed
+  STATUS=$(echo "$RESPONSE" | sed -n 's/.*"status": *"\([^"]*\)".*/\1/p' | head -1)
+  CONCLUSION=$(echo "$RESPONSE" | sed -n 's/.*"conclusion": *"\([^"]*\)".*/\1/p' | head -1)
+
+  echo "📊 Status: $STATUS | Conclusion: $CONCLUSION"
 
   if [ "$STATUS" = "completed" ]; then
-    echo "✅ Testes passaram! Prosseguindo com deploy..."
-    exit 0
-  elif [ "$STATUS" = "failure" ] || [ "$STATUS" = "cancelled" ]; then
-    echo "❌ Testes falharam ou foram cancelados. Build ignorado."
-    exit 1
-  else
-    echo "⏳ Aguardando conclusão dos testes... (tentativa $((ATTEMPT + 1))/$MAX_ATTEMPTS)"
-    sleep 10
-    ATTEMPT=$((ATTEMPT + 1))
+    if [ "$CONCLUSION" = "success" ]; then
+      echo "✅ Testes passaram! Prosseguindo com deploy..."
+      exit 0
+    elif [ "$CONCLUSION" = "failure" ] || [ "$CONCLUSION" = "cancelled" ]; then
+      echo "❌ Testes falharam ou foram cancelados. Build ignorado."
+      exit 1
+    fi
   fi
+
+  echo "⏳ Aguardando conclusão dos testes..."
+  sleep 10
+  ATTEMPT=$((ATTEMPT + 1))
 done
 
 echo "⏱️ Timeout aguardando testes. Build ignorado por segurança."
