@@ -4,7 +4,7 @@ Este repositório contém o código-fonte para o teste técnico da Seiwa, inclui
 
 projeto foi desenvolvido utilizando Python com FastAPI, PostgreSQL como banco de dados, e Docker para containerização. Além disso, foram integradas ferramentas de monitoramento como Prometheus e Grafana.
 
-url de produção: (https://api-seiwa.fenol64.com.br/docs)
+url de produção: https://api-seiwa.fenol64.com.br/docs
 
 ### Contexto
 
@@ -80,6 +80,26 @@ Fique a vontade para usar uma linguagem/framework de sua escolha, bem como para 
    make up
    ```
 4. Acesse a API em `http://localhost:8000`. A documentação interativa estará disponível em `http://localhost:8000/docs`.
+
+## Endpoints para o Teste Técnico
+
+- **Médicos**
+  - `POST /medicos/`: Cadastrar um novo médico.
+  - `GET /medicos/{medico_id}/`: Obter detalhes de um médico.
+- **Produções**
+    - `POST /producoes/`: Registrar uma nova produção.
+    - `GET /producoes/{medico_id}/`: Listar produções de um médico.
+- **Repasses**
+    - `POST /repasses/`: Registrar um novo repasse.
+    - `GET /repasses/{medico_id}/`: Listar repasses de um médico.
+- **Saldo Consolidado**
+    - `GET /medicos/{medico_id}/saldo/?data_inicio=&data_fim=`: Consultar saldo consolidado de um médico em um período.
+
+## Testes
+Para rodar os testes automatizados, execute:
+```bash
+make test
+```
 
 
 
