@@ -18,6 +18,7 @@ from src.infrastructure.database.models.doctor_model import DoctorModel
 from src.infrastructure.database.models.hospital_model import HospitalModel
 from src.infrastructure.database.models.doctor_hospital_model import DoctorHospitalModel
 from src.infrastructure.database.models.production_model import ProductionModel
+from src.infrastructure.database.models.repasse_model import RepasseModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

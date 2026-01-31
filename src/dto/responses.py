@@ -87,3 +87,15 @@ class SignInResponse(BaseModel):
                 }
             }
         }
+
+
+class DeleteResponseDTO(BaseModel):
+    """Resposta padrão de deleção"""
+    message: str = Field(..., description="Mensagem de confirmação da deleção")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "message": "Registro deletado com sucesso"
+            }
+        }

@@ -20,11 +20,18 @@ from src.domain.usecase.production.get_production_by_id import GetProductionById
 from src.domain.usecase.production.get_productions_by_doctor import GetProductionsByDoctorUseCase
 from src.domain.usecase.production.update_production import UpdateProductionUseCase
 from src.domain.usecase.production.delete_production import DeleteProductionUseCase
+from src.domain.usecase.repasse.create_repasse import CreateRepasseUseCase
+from src.domain.usecase.repasse.get_all_repasses import GetAllRepassesUseCase
+from src.domain.usecase.repasse.get_repasse_by_id import GetRepasseByIdUseCase
+from src.domain.usecase.repasse.get_repasses_by_production import GetRepassesByProductionUseCase
+from src.domain.usecase.repasse.update_repasse import UpdateRepasseUseCase
+from src.domain.usecase.repasse.delete_repasse import DeleteRepasseUseCase
 from src.infrastructure.repositories.user_repository import UserRepository
 from src.infrastructure.repositories.doctor_repository import DoctorRepository
 from src.infrastructure.repositories.hospital_repository import HospitalRepository
 from src.infrastructure.repositories.doctor_hospital_repository import DoctorHospitalRepository
 from src.infrastructure.repositories.production_repository import ProductionRepository
+from src.infrastructure.repositories.repasse_repository import RepasseRepository
 from src.infrastructure.database.connection import SessionLocal
 from src.infrastructure.services.password_service import PasswordService
 from src.infrastructure.services.jwt_service import JWTService
@@ -40,6 +47,7 @@ class Container:
         self.hospital_repository = HospitalRepository(db=self.db)
         self.doctor_hospital_repository = DoctorHospitalRepository(db=self.db)
         self.production_repository = ProductionRepository(db=self.db)
+        self.repasse_repository = RepasseRepository(db=self.db)
 
         # Services
         self.password_service = PasswordService()
@@ -154,4 +162,29 @@ class Container:
             get_production_by_id_port=self.production_repository
         )
 
+        # Repasse UseCases
+        self.create_repasse_usecase = CreateRepasseUseCase(
+            repasse_repository=self.repasse_repository,
+            production_repository=self.production_repository
+        )
+
+        self.get_all_repasses_usecase = GetAllRepassesUseCase(
+            repasse_repository=self.repasse_repository
+        )
+
+        self.get_repasse_by_id_usecase = GetRepasseByIdUseCase(
+            repasse_repository=self.repasse_repository
+        )
+
+        self.get_repasses_by_production_usecase = GetRepassesByProductionUseCase(
+            repasse_repository=self.repasse_repository
+        )
+
+        self.update_repasse_usecase = UpdateRepasseUseCase(
+            repasse_repository=self.repasse_repository
+        )
+
+        self.delete_repasse_usecase = DeleteRepasseUseCase(
+            repasse_repository=self.repasse_repository
+        )
 
