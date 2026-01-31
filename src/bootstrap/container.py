@@ -14,10 +14,17 @@ from src.domain.usecase.doctor_hospital.assign_doctor_to_hospital import AssignD
 from src.domain.usecase.doctor_hospital.remove_doctor_from_hospital import RemoveDoctorFromHospitalUseCase
 from src.domain.usecase.doctor_hospital.get_hospitals_by_doctor import GetHospitalsByDoctorUseCase
 from src.domain.usecase.doctor_hospital.get_doctors_by_hospital import GetDoctorsByHospitalUseCase
+from src.domain.usecase.production.create_production import CreateProductionUseCase
+from src.domain.usecase.production.get_all_productions import GetAllProductionsUseCase
+from src.domain.usecase.production.get_production_by_id import GetProductionByIdUseCase
+from src.domain.usecase.production.get_productions_by_doctor import GetProductionsByDoctorUseCase
+from src.domain.usecase.production.update_production import UpdateProductionUseCase
+from src.domain.usecase.production.delete_production import DeleteProductionUseCase
 from src.infrastructure.repositories.user_repository import UserRepository
 from src.infrastructure.repositories.doctor_repository import DoctorRepository
 from src.infrastructure.repositories.hospital_repository import HospitalRepository
 from src.infrastructure.repositories.doctor_hospital_repository import DoctorHospitalRepository
+from src.infrastructure.repositories.production_repository import ProductionRepository
 from src.infrastructure.database.connection import SessionLocal
 from src.infrastructure.services.password_service import PasswordService
 from src.infrastructure.services.jwt_service import JWTService
@@ -32,6 +39,7 @@ class Container:
         self.doctor_repository = DoctorRepository(db=self.db)
         self.hospital_repository = HospitalRepository(db=self.db)
         self.doctor_hospital_repository = DoctorHospitalRepository(db=self.db)
+        self.production_repository = ProductionRepository(db=self.db)
 
         # Services
         self.password_service = PasswordService()
@@ -115,6 +123,34 @@ class Container:
 
         self.get_doctors_by_hospital_usecase = GetDoctorsByHospitalUseCase(
             get_doctors_by_hospital_port=self.doctor_hospital_repository
+        )
+
+        # Production UseCases
+        self.create_production_usecase = CreateProductionUseCase(
+            save_production_port=self.production_repository,
+            get_doctor_by_id_port=self.doctor_repository
+        )
+
+        self.get_all_productions_usecase = GetAllProductionsUseCase(
+            get_all_productions_port=self.production_repository
+        )
+
+        self.get_production_by_id_usecase = GetProductionByIdUseCase(
+            get_production_by_id_port=self.production_repository
+        )
+
+        self.get_productions_by_doctor_usecase = GetProductionsByDoctorUseCase(
+            get_productions_by_doctor_port=self.production_repository
+        )
+
+        self.update_production_usecase = UpdateProductionUseCase(
+            update_production_port=self.production_repository,
+            get_production_by_id_port=self.production_repository
+        )
+
+        self.delete_production_usecase = DeleteProductionUseCase(
+            delete_production_port=self.production_repository,
+            get_production_by_id_port=self.production_repository
         )
 
 

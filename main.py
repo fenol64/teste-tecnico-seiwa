@@ -7,6 +7,7 @@ from src.routes.user import router as user_router
 from src.routes.doctor import router as doctor_router
 from src.routes.hospital import router as hospital_router
 from src.routes.doctor_hospital import router as doctor_hospital_router
+from src.routes.production import router as production_router
 from src.dto.responses import HealthCheckResponse
 
 def custom_openapi():
@@ -47,6 +48,10 @@ def custom_openapi():
             {
                 "name": "Doctor-Hospital",
                 "description": "Endpoints para gerenciamento de vínculos entre médicos e hospitais"
+            },
+            {
+                "name": "Productions",
+                "description": "Endpoints para gerenciamento de produções médicas (plantões e consultas)"
             }
         ]
     )
@@ -99,6 +104,7 @@ def create_app() -> FastAPI:
         return {"status": "ok"}
 
     app.include_router(oauth_router, prefix="/api/v1", tags=["Authentication"])
+    app.include_router(production_router, prefix="/api/v1/productions", tags=["Productions"])
     app.include_router(user_router, prefix="/api/v1/user", tags=["User"])
     app.include_router(doctor_router, prefix="/api/v1/doctors", tags=["Doctors"])
     app.include_router(hospital_router, prefix="/api/v1/hospitals", tags=["Hospitals"])
