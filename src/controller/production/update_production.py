@@ -14,6 +14,7 @@ class UpdateProductionHandler:
             return {
                 "id": str(production.id),
                 "doctor_id": str(production.doctor_id),
+                "hospital_id": str(production.hospital_id),
                 "type": production.type,
                 "date": production.date.isoformat() if hasattr(production.date, 'isoformat') else str(production.date),
                 "description": production.description,

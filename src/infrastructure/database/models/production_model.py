@@ -17,6 +17,7 @@ class ProductionModel(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     doctor_id = Column(UUID(as_uuid=True), ForeignKey("doctors.id", ondelete="CASCADE"), nullable=False, index=True)
+    hospital_id = Column(UUID(as_uuid=True), ForeignKey("hospitals.id", ondelete="CASCADE"), nullable=False, index=True)
     type = Column(Enum(ProductionType), nullable=False)
     date = Column(Date, nullable=False)
     description = Column(String, nullable=True)

@@ -27,6 +27,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
         return Production(
             id=production_model.id,
             doctor_id=production_model.doctor_id,
+            hospital_id=production_model.hospital_id,
             type=production_model.type.value,
             date=production_model.date,
             description=production_model.description,
@@ -42,6 +43,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
             Production(
                 id=production.id,
                 doctor_id=production.doctor_id,
+                hospital_id=production.hospital_id,
                 type=production.type.value,
                 date=production.date,
                 description=production.description,
@@ -61,6 +63,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
             Production(
                 id=production.id,
                 doctor_id=production.doctor_id,
+                hospital_id=production.hospital_id,
                 type=production.type.value,
                 date=production.date,
                 description=production.description,
@@ -75,6 +78,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
         production_model = ProductionModel(
             id=production.id,
             doctor_id=production.doctor_id,
+            hospital_id=production.hospital_id,
             type=production.type,
             date=production.date,
             description=production.description
@@ -87,6 +91,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
         return Production(
             id=production_model.id,
             doctor_id=production_model.doctor_id,
+            hospital_id=production_model.hospital_id,
             type=production_model.type.value,
             date=production_model.date,
             description=production_model.description,
@@ -110,6 +115,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
 
         return Production(
             id=production_model.id,
+            hospital_id=production_model.hospital_id,
             doctor_id=production_model.doctor_id,
             type=production_model.type.value,
             date=production_model.date,

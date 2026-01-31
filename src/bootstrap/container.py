@@ -128,7 +128,8 @@ class Container:
         # Production UseCases
         self.create_production_usecase = CreateProductionUseCase(
             save_production_port=self.production_repository,
-            get_doctor_by_id_port=self.doctor_repository
+            get_doctor_by_id_port=self.doctor_repository,
+            get_hospital_by_id_port=self.hospital_repository
         )
 
         self.get_all_productions_usecase = GetAllProductionsUseCase(

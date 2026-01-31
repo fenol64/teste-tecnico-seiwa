@@ -12,6 +12,7 @@ class ProductionType(str, Enum):
 class CreateProductionDTO(BaseModel):
     """DTO para criação de nova produção"""
     doctor_id: str = Field(..., description="ID do médico")
+    hospital_id: str = Field(..., description="ID do hospital")
     type: ProductionType = Field(..., description="Tipo de produção (plantao ou consulta)")
     date: date_type = Field(..., description="Data da produção")
     description: str | None = Field(None, max_length=500, description="Descrição adicional (opcional)")
@@ -20,6 +21,7 @@ class CreateProductionDTO(BaseModel):
         json_schema_extra = {
             "example": {
                 "doctor_id": "123e4567-e89b-12d3-a456-426614174000",
+                "hospital_id": "987e6543-e21b-12d3-a456-426614174999",
                 "type": "plantao",
                 "date": "2026-01-30",
                 "description": "Plantão noturno no pronto socorro"
@@ -47,6 +49,7 @@ class ProductionResponseDTO(BaseModel):
     """DTO de resposta com dados da produção"""
     id: str
     doctor_id: str
+    hospital_id: str
     type: str
     date: str
     description: str | None = None
@@ -58,6 +61,7 @@ class ProductionResponseDTO(BaseModel):
             "example": {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
                 "doctor_id": "987e6543-e21b-12d3-a456-426614174999",
+                "hospital_id": "456e7890-a12b-34c5-d678-901234567890",
                 "type": "plantao",
                 "date": "2026-01-30",
                 "description": "Plantão noturno no pronto socorro",
