@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from uuid import UUID
+from datetime import datetime
 from src.domain.entities.Repasse import Repasse
 from src.dto.repasseDTO import CreateRepasseDTO, UpdateRepasseDTO
 
@@ -12,6 +13,15 @@ class IRepasseRepository(ABC):
 
     @abstractmethod
     def get_all(self) -> List[Repasse]:
+        pass
+
+    @abstractmethod
+    def get_by_doctor_and_date_range(
+        self,
+        doctor_id: UUID,
+        start_date: Optional[datetime],
+        end_date: Optional[datetime]
+    ) -> List[Repasse]:
         pass
 
     @abstractmethod

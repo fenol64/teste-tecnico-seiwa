@@ -10,13 +10,14 @@ from src.controller.repasse.get_repasse_by_id import get_repasse_by_id_controlle
 from src.controller.repasse.get_repasses_by_production import get_repasses_by_production_controller
 from src.controller.repasse.update_repasse import update_repasse_controller
 from src.controller.repasse.delete_repasse import delete_repasse_controller
+from src.controller.repasse.get_repasse_stats import get_repasse_stats
 from src.domain.usecase.repasse.create_repasse import CreateRepasseUseCase
 from src.domain.usecase.repasse.get_all_repasses import GetAllRepassesUseCase
 from src.domain.usecase.repasse.get_repasse_by_id import GetRepasseByIdUseCase
 from src.domain.usecase.repasse.get_repasses_by_production import GetRepassesByProductionUseCase
 from src.domain.usecase.repasse.update_repasse import UpdateRepasseUseCase
 from src.domain.usecase.repasse.delete_repasse import DeleteRepasseUseCase
-from src.dto.repasseDTO import CreateRepasseDTO, UpdateRepasseDTO, RepasseResponseDTO
+from src.dto.repasseDTO import CreateRepasseDTO, UpdateRepasseDTO, RepasseResponseDTO, RepasseStatsDTO
 from src.dto.responses import DeleteResponseDTO
 
 router = APIRouter()
@@ -106,3 +107,12 @@ async def delete_repasse(
 ):
     return delete_repasse_controller(repasse_id, usecase)
 
+
+router.add_api_route(
+    "/stats/{doctor_id}",
+    get_repasse_stats,
+    methods=["GET"],
+    response_model=RepasseStatsDTO,
+    summary="Estatísticas de repasses do médico",
+    description="Retorna estatísticas de repasses (pendentes vs consolidados) para um médico em um intervalo de datas"
+)

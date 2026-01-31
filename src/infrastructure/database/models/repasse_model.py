@@ -1,8 +1,9 @@
-from sqlalchemy import Column, String, DateTime, Numeric, ForeignKey
+from sqlalchemy import Column, String, DateTime, Numeric, ForeignKey, Enum as SAEnum
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 import uuid
 from src.infrastructure.database.connection import Base
+from src.domain.enums.repasse_status import RepasseStatus
 
 
 class RepasseModel(Base):
@@ -13,3 +14,4 @@ class RepasseModel(Base):
     valor = Column(Numeric(10, 2), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    status = Column(SAEnum(RepasseStatus), default=RepasseStatus.PENDENTE, nullable=False)

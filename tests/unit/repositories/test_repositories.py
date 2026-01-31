@@ -16,6 +16,7 @@ from src.domain.entities.Doctor import Doctor
 from src.domain.entities.Hospital import Hospital
 from src.domain.entities.Production import Production
 from src.domain.entities.Repasse import Repasse
+from src.domain.enums.repasse_status import RepasseStatus
 
 
 class TestDoctorRepository:
@@ -82,7 +83,7 @@ class TestDoctorRepository:
     def test_update_doctor(self, db_session, created_doctor):
         """Test updating a doctor"""
         repo = DoctorRepository(db_session)
-        
+
         # update takes (id, **kwargs)
         result = repo.update(created_doctor.id, name="Dr. Updated")
 
@@ -110,7 +111,7 @@ class TestHospitalRepository:
             "name": "Hospital ABC",
             "address": "Rua X"
         }
-        
+
         hospital = Hospital(
             id=uuid4(),
             name=hospital_data["name"],
@@ -133,7 +134,7 @@ class TestHospitalRepository:
     def test_update_hospital(self, db_session, created_hospital):
         """Test updating hospital"""
         repo = HospitalRepository(db_session)
-        
+
         result = repo.update(created_hospital.id, name="Updated Hospital")
 
         assert result is not None
@@ -146,7 +147,7 @@ class TestProductionRepository:
     def test_create_production(self, db_session, created_doctor, created_hospital):
         """Test creating production"""
         repo = ProductionRepository(db_session)
-        
+
         # Use Entity
         production = Production(
             id=uuid4(),
@@ -162,7 +163,7 @@ class TestProductionRepository:
 
         assert result is not None
         assert result.type == "plantao"
-        
+
     def test_get_productions_by_doctor(self, db_session, created_production):
         """Test getting productions by doctor"""
         repo = ProductionRepository(db_session)
@@ -185,3 +186,31 @@ class TestRepasseRepository:
 
         assert result is not None
         assert result.valor == Decimal("1000.00")
+        assert result.status == RepasseStatus.PENDENTE
+
+    def test_get_by_doctor_and_date_range(self, db_session, created_production):
+        repo = RepasseRepository(db_session)
+
+        # Create consolidated repasse
+        dto1 = CreateRepasseDTO(
+            production_id=created_production.id,
+            valor=Decimal("500.00"),
+            status=RepasseStatus.CONSOLIDADO
+        )
+        repo.create(dto1)
+
+        # Create pending repasse
+        dto2 = CreateRepasseDTO(
+            production_id=created_production.id,
+            valor=Decimal("300.00"),
+            status=RepasseStatus.PENDENTE
+        )
+        repo.create(dto2)
+
+        doctor_id = created_production.doctor_id
+
+        # Test without dates
+        results = repo.get_by_doctor_and_date_range(doctor_id, None, None)
+        assert len(results) == 2
+        assert any(r.status == RepasseStatus.CONSOLIDADO for r in results)
+        assert any(r.status == RepasseStatus.PENDENTE for r in results)

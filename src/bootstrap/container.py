@@ -26,6 +26,7 @@ from src.domain.usecase.repasse.get_repasse_by_id import GetRepasseByIdUseCase
 from src.domain.usecase.repasse.get_repasses_by_production import GetRepassesByProductionUseCase
 from src.domain.usecase.repasse.update_repasse import UpdateRepasseUseCase
 from src.domain.usecase.repasse.delete_repasse import DeleteRepasseUseCase
+from src.domain.usecase.repasse.get_repasse_stats import GetRepasseStatsUseCase
 from src.infrastructure.repositories.user_repository import UserRepository
 from src.infrastructure.repositories.doctor_repository import DoctorRepository
 from src.infrastructure.repositories.hospital_repository import HospitalRepository
@@ -188,3 +189,7 @@ class Container:
             repasse_repository=self.repasse_repository
         )
 
+
+        self.get_repasse_stats_use_case = GetRepasseStatsUseCase(
+            repasse_repository=self.repasse_repository
+        )
