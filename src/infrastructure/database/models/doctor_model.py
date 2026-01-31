@@ -14,8 +14,8 @@ class DoctorModel(Base):
     specialty = Column(String(100), nullable=False)
     phone = Column(String(20), nullable=True)
     email = Column(String, unique=True, nullable=False, index=True)
-    created_at = Column(DateTime, default=datetime.now().isoformat(), nullable=False)
-    updated_at = Column(DateTime, onupdate=datetime.now().isoformat())
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, onupdate=datetime.utcnow)
 
     def __repr__(self):
         return f"<Doctor(id={self.id}, name={self.name}, crm={self.crm}, specialty={self.specialty})>"
