@@ -13,7 +13,11 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from src.infrastructure.database.connection import Base, DATABASE_URL
-from src.infrastructure.database.models.user_model import UserModel  # Importar todos os modelos aqui
+from src.infrastructure.database.models.user_model import UserModel
+from src.infrastructure.database.models.doctor_model import DoctorModel
+from src.infrastructure.database.models.hospital_model import HospitalModel
+from src.infrastructure.database.models.doctor_hospital_model import DoctorHospitalModel
+from src.infrastructure.database.models.production_model import ProductionModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
