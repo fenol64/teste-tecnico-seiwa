@@ -9,11 +9,13 @@ from src.controller.hospital.get_all_hospitals import GetAllHospitalsHandler
 from src.controller.hospital.get_hospital_by_id import GetHospitalByIdHandler
 from src.controller.hospital.update_hospital import UpdateHospitalHandler
 from src.controller.hospital.delete_hospital import DeleteHospitalHandler
+from src.controller.doctor_hospital.get_doctors_by_hospital import GetDoctorsByHospitalHandler
 from src.domain.usecase.hospital.create_hospital import CreateHospitalUseCase
 from src.domain.usecase.hospital.get_all_hospitals import GetAllHospitalsUseCase
 from src.domain.usecase.hospital.get_hospital_by_id import GetHospitalByIdUseCase
 from src.domain.usecase.hospital.update_hospital import UpdateHospitalUseCase
 from src.domain.usecase.hospital.delete_hospital import DeleteHospitalUseCase
+from src.domain.usecase.doctor_hospital.get_doctors_by_hospital import GetDoctorsByHospitalUseCase
 from src.dto.hospitalDTO import CreateHospitalDTO, UpdateHospitalDTO, HospitalResponseDTO
 
 router = APIRouter()
@@ -96,4 +98,19 @@ async def delete_hospital(
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     handler = DeleteHospitalHandler(delete_hospital_usecase=usecase)
+    return handler.handle(hospital_id)
+
+
+@router.get(
+    '/{hospital_id}/doctors',
+    summary="Listar Médicos de um Hospital",
+    description="Retorna todos os médicos que atuam em um hospital",
+    status_code=status.HTTP_200_OK
+)
+async def get_doctors_by_hospital(
+    hospital_id: uuid.UUID,
+    usecase: GetDoctorsByHospitalUseCase = Depends(usecase_factory('get_doctors_by_hospital_usecase')),
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    handler = GetDoctorsByHospitalHandler(get_doctors_by_hospital_usecase=usecase)
     return handler.handle(hospital_id)

@@ -6,7 +6,6 @@ from src.routes.oauth import router as oauth_router
 from src.routes.user import router as user_router
 from src.routes.doctor import router as doctor_router
 from src.routes.hospital import router as hospital_router
-from src.routes.doctor_hospital import router as doctor_hospital_router
 from src.routes.production import router as production_router
 from src.routes.repasse import router as repasse_router
 from src.dto.responses import HealthCheckResponse
@@ -40,15 +39,11 @@ def custom_openapi():
             },
             {
                 "name": "Doctors",
-                "description": "Endpoints para gerenciamento de médicos"
+                "description": "Endpoints para gerenciamento de médicos e seus vínculos com hospitais"
             },
             {
                 "name": "Hospitals",
                 "description": "Endpoints para gerenciamento de hospitais"
-            },
-            {
-                "name": "Doctor-Hospital",
-                "description": "Endpoints para gerenciamento de vínculos entre médicos e hospitais"
             },
             {
                 "name": "Productions",
@@ -113,7 +108,6 @@ def create_app() -> FastAPI:
     app.include_router(user_router, prefix="/api/v1/user", tags=["User"])
     app.include_router(doctor_router, prefix="/api/v1/doctors", tags=["Doctors"])
     app.include_router(hospital_router, prefix="/api/v1/hospitals", tags=["Hospitals"])
-    app.include_router(doctor_hospital_router, prefix="/api/v1/doctor-hospital", tags=["Doctor-Hospital"])
     app.include_router(repasse_router, prefix="/api/v1/repasses", tags=["Repasses"])
 
     # Aplicar schema customizado do OpenAPI

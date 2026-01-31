@@ -9,12 +9,19 @@ from src.controller.doctor.get_all_doctors import GetAllDoctorsHandler
 from src.controller.doctor.get_doctor_by_id import GetDoctorByIdHandler
 from src.controller.doctor.update_doctor import UpdateDoctorHandler
 from src.controller.doctor.delete_doctor import DeleteDoctorHandler
+from src.controller.doctor_hospital.assign_doctor_to_hospital import AssignDoctorToHospitalHandler
+from src.controller.doctor_hospital.remove_doctor_from_hospital import RemoveDoctorFromHospitalHandler
+from src.controller.doctor_hospital.get_hospitals_by_doctor import GetHospitalsByDoctorHandler
 from src.domain.usecase.doctor.create_doctor import CreateDoctorUseCase
 from src.domain.usecase.doctor.get_all_doctors import GetAllDoctorsUseCase
 from src.domain.usecase.doctor.get_doctor_by_id import GetDoctorByIdUseCase
 from src.domain.usecase.doctor.update_doctor import UpdateDoctorUseCase
 from src.domain.usecase.doctor.delete_doctor import DeleteDoctorUseCase
+from src.domain.usecase.doctor_hospital.assign_doctor_to_hospital import AssignDoctorToHospitalUseCase
+from src.domain.usecase.doctor_hospital.remove_doctor_from_hospital import RemoveDoctorFromHospitalUseCase
+from src.domain.usecase.doctor_hospital.get_hospitals_by_doctor import GetHospitalsByDoctorUseCase
 from src.dto.doctorDTO import CreateDoctorDTO, UpdateDoctorDTO, DoctorResponseDTO
+from src.dto.doctorHospitalDTO import DoctorHospitalResponseDTO
 
 router = APIRouter()
 
@@ -96,4 +103,52 @@ async def delete_doctor(
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     handler = DeleteDoctorHandler(delete_doctor_usecase=usecase)
+    return handler.handle(doctor_id)
+
+
+@router.post(
+    '/{doctor_id}/hospitals/{hospital_id}',
+    summary="Vincular Médico a Hospital",
+    description="Cria um vínculo entre médico e hospital",
+    response_model=DoctorHospitalResponseDTO,
+    status_code=status.HTTP_201_CREATED
+)
+async def assign_doctor_to_hospital(
+    doctor_id: uuid.UUID,
+    hospital_id: uuid.UUID,
+    usecase: AssignDoctorToHospitalUseCase = Depends(usecase_factory('assign_doctor_to_hospital_usecase')),
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    handler = AssignDoctorToHospitalHandler(assign_doctor_to_hospital_usecase=usecase)
+    return handler.handle(doctor_id, hospital_id)
+
+
+@router.delete(
+    '/{doctor_id}/hospitals/{hospital_id}',
+    summary="Remover Médico de Hospital",
+    description="Remove o vínculo entre médico e hospital",
+    status_code=status.HTTP_200_OK
+)
+async def remove_doctor_from_hospital(
+    doctor_id: uuid.UUID,
+    hospital_id: uuid.UUID,
+    usecase: RemoveDoctorFromHospitalUseCase = Depends(usecase_factory('remove_doctor_from_hospital_usecase')),
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    handler = RemoveDoctorFromHospitalHandler(remove_doctor_from_hospital_usecase=usecase)
+    return handler.handle(doctor_id, hospital_id)
+
+
+@router.get(
+    '/{doctor_id}/hospitals',
+    summary="Listar Hospitais de um Médico",
+    description="Retorna todos os hospitais onde um médico atua",
+    status_code=status.HTTP_200_OK
+)
+async def get_hospitals_by_doctor(
+    doctor_id: uuid.UUID,
+    usecase: GetHospitalsByDoctorUseCase = Depends(usecase_factory('get_hospitals_by_doctor_usecase')),
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    handler = GetHospitalsByDoctorHandler(get_hospitals_by_doctor_usecase=usecase)
     return handler.handle(doctor_id)
