@@ -16,3 +16,4 @@ httpx==0.26.0
 pytest-cov==4.1.0
 faker==22.6.0
 mangum==0.14.0
+prometheus-fastapi-instrumentator==7.0.0

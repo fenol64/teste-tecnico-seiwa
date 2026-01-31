@@ -1,6 +1,8 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from src.routes.oauth import router as oauth_router
 from src.routes.user import router as user_router
@@ -61,6 +63,8 @@ def custom_openapi():
     return app.openapi_schema
 
 def create_app() -> FastAPI:
+    api_version = os.getenv("API_VERSION", "v1")
+    api_prefix = f"/api/{api_version}"
     app = FastAPI(
         title="API Seiwa - Teste Técnico",
         description="API RESTful desenvolvida com FastAPI, PostgreSQL e Clean Architecture",
@@ -103,15 +107,19 @@ def create_app() -> FastAPI:
         """
         return {"status": "ok"}
 
-    app.include_router(oauth_router, prefix="/api/v1", tags=["Authentication"])
-    app.include_router(production_router, prefix="/api/v1/productions", tags=["Productions"])
-    app.include_router(user_router, prefix="/api/v1/user", tags=["User"])
-    app.include_router(doctor_router, prefix="/api/v1/doctors", tags=["Doctors"])
-    app.include_router(hospital_router, prefix="/api/v1/hospitals", tags=["Hospitals"])
-    app.include_router(repasse_router, prefix="/api/v1/repasses", tags=["Repasses"])
+
+    app.include_router(oauth_router, prefix=f"{api_prefix}", tags=["Authentication"])
+    app.include_router(production_router, prefix=f"{api_prefix}/productions", tags=["Productions"])
+    app.include_router(user_router, prefix=f"{api_prefix}/user", tags=["User"])
+    app.include_router(doctor_router, prefix=f"{api_prefix}/doctors", tags=["Doctors"])
+    app.include_router(hospital_router, prefix=f"{api_prefix}/hospitals", tags=["Hospitals"])
+    app.include_router(repasse_router, prefix=f"{api_prefix}/repasses", tags=["Repasses"])
 
     # Aplicar schema customizado do OpenAPI
     app.openapi = custom_openapi
+
+    # Instrumentar com Prometheus
+    Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
     return app
 
