@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
+from mangum import Mangum
 
 from src.routes.oauth import router as oauth_router
 from src.routes.user import router as user_router
@@ -118,4 +119,4 @@ def create_app() -> FastAPI:
 app = create_app()
 
 #vercel
-handler = app
+handler = Mangum(app)
