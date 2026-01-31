@@ -27,8 +27,6 @@ while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
     "https://api.github.com/repos/$REPO/commits/$COMMIT_SHA/check-runs")
 
   echo "📡 Resposta da API (tentativa $((ATTEMPT + 1))/$MAX_ATTEMPTS):"
-  echo "$RESPONSE" | head -20
-
   # Extrai o status e conclusion usando sed
   STATUS=$(echo "$RESPONSE" | sed -n 's/.*"status": *"\([^"]*\)".*/\1/p' | head -1)
   CONCLUSION=$(echo "$RESPONSE" | sed -n 's/.*"conclusion": *"\([^"]*\)".*/\1/p' | head -1)
