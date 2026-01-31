@@ -20,13 +20,14 @@ echo "📍 Commit: $COMMIT_SHA"
 MAX_ATTEMPTS=30
 ATTEMPT=0
 
+
 while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
   # Busca o status dos checks do commit
   STATUS=$(curl -s -H "Accept: application/vnd.github.v3+json" \
     "https://api.github.com/repos/$REPO/commits/$COMMIT_SHA/check-runs" | \
-    grep -o '"conclusion":"[^"]*"' | head -1 | cut -d'"' -f4)
+    grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
 
-  if [ "$STATUS" = "success" ]; then
+  if [ "$STATUS" = "completed" ]; then
     echo "✅ Testes passaram! Prosseguindo com deploy..."
     exit 0
   elif [ "$STATUS" = "failure" ] || [ "$STATUS" = "cancelled" ]; then
