@@ -20,8 +20,8 @@ def custom_openapi():
         version="1.0.0",
         description="API RESTful desenvolvida com FastAPI, PostgreSQL e Clean Architecture. Inclui autenticação de usuários, gerenciamento de dados e operações CRUD completas.",
         servers=[
-            {"url": "http://localhost:8000", "description": "Servidor Local"},
-            {"url": "https://api-seiwa.fenol64.com.br", "description": "Servidor de Produção"}
+            {"url": "https://api-seiwa.fenol64.com.br", "description": "Servidor de Produção"},
+            {"url": "http://localhost:8000", "description": "Servidor Local"}
         ],
         routes=app.routes,
         tags=[
