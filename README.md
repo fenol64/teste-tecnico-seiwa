@@ -1,5 +1,7 @@
 # Teste tecnico Seiwa
 
+[![CI/CD](https://github.com/fenol64/teste-tecnico-seiwa/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/fenol64/teste-tecnico-seiwa/actions/workflows/ci-cd.yml)
+
 Este repositório contém o código-fonte para o teste técnico da Seiwa, incluindo a implementação de uma API RESTful para gerenciamento de repasses financeiros.
 
 projeto foi desenvolvido utilizando Python com FastAPI, PostgreSQL como banco de dados, e Docker para containerização. Além disso, foram integradas ferramentas de monitoramento como Prometheus e Grafana.
@@ -100,6 +102,35 @@ Para rodar os testes automatizados, execute:
 ```bash
 make test
 ```
+
+## CI/CD
+
+O projeto possui pipeline automatizado de CI/CD usando GitHub Actions:
+
+- ✅ **Testes automáticos** em cada push e pull request
+- 🚀 **Deploy automático** para Vercel (apenas após testes passarem)
+- 📊 **Cobertura de código** com relatórios automáticos
+
+**O deploy só acontece se todos os testes passarem!**
+
+Para mais detalhes, veja [.github/CI-CD.md](.github/CI-CD.md).
+
+## Monitoramento
+
+O projeto inclui stack completa de monitoramento:
+
+- **Prometheus** (http://localhost:9090): Coleta de métricas
+- **Grafana** (http://localhost:3000): Dashboards e visualizações
+  - Usuário: `admin`
+  - Senha: `admin`
+
+Para acessar:
+```bash
+make prometheus  # Abre Prometheus
+make grafana     # Abre Grafana
+```
+
+Veja [MONITORING.md](MONITORING.md) para mais detalhes.
 
 
 
