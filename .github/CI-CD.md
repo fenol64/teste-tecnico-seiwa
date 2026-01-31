@@ -42,7 +42,7 @@ Este comando é executado antes de cada build. Se retornar `1`, o build é ignor
 
 ## Script de Verificação
 
-O [vercel-ignore-build.sh](../vercel-ignore-build.sh) faz:
+O [ops/vercel-ignore-build.sh](../ops/vercel-ignore-build.sh) faz:
 
 1. Verifica se a branch é `main` ou `master`
 2. Consulta a API do GitHub para obter status dos checks

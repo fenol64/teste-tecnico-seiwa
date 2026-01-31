@@ -18,5 +18,5 @@
       "master": true
     }
   },
-  "ignoreCommand": "bash vercel-ignore-build.sh"
+  "ignoreCommand": "bash ops/vercel-ignore-build.sh"
 }
