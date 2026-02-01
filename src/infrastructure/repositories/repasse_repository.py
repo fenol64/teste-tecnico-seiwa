@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from uuid import UUID
 from datetime import datetime
 from sqlalchemy.orm import Session
@@ -24,9 +24,11 @@ class RepasseRepository(IRepasseRepository):
         self.db.refresh(repasse)
         return self._to_entity(repasse)
 
-    def get_all(self) -> List[Repasse]:
-        repasses = self.db.query(RepasseModel).all()
-        return [self._to_entity(repasse) for repasse in repasses]
+    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Repasse], int]:
+        query = self.db.query(RepasseModel)
+        total = query.count()
+        repasses = query.offset(skip).limit(limit).all()
+        return [self._to_entity(repasse) for repasse in repasses], total
 
     def get_by_id(self, repasse_id: UUID) -> Optional[Repasse]:
         repasse = self.db.query(RepasseModel).filter(RepasseModel.id == repasse_id).first()

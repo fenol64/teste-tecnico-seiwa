@@ -75,10 +75,11 @@ class TestDoctorRepository:
         """Test getting all doctors"""
         repo = DoctorRepository(db_session)
 
-        result = repo.get_all()
+        doctors, total = repo.get_all()
 
-        assert len(result) > 0
-        assert any(d.id == created_doctor.id for d in result)
+        assert len(doctors) > 0
+        assert total > 0
+        assert any(d.id == created_doctor.id for d in doctors)
 
     def test_update_doctor(self, db_session, created_doctor):
         """Test updating a doctor"""
@@ -127,9 +128,10 @@ class TestHospitalRepository:
     def test_get_all_hospitals(self, db_session, created_hospital):
         """Test listing hospitals"""
         repo = HospitalRepository(db_session)
-        result = repo.get_all()
-        assert len(result) > 0
-        assert any(h.id == created_hospital.id for h in result)
+        hospitals, total = repo.get_all()
+        assert len(hospitals) > 0
+        assert total > 0
+        assert any(h.id == created_hospital.id for h in hospitals)
 
     def test_update_hospital(self, db_session, created_hospital):
         """Test updating hospital"""

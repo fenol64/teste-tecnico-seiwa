@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from typing import Optional, List
+from typing import Optional, List, Tuple
 import uuid
 
 from src.domain.entities.Doctor import Doctor
@@ -71,11 +71,13 @@ class DoctorRepository(IGetDoctorById, IGetDoctorByCRM, IGetDoctorByEmail, ISave
             updated_at=doctor_model.updated_at.isoformat() if doctor_model.updated_at else None
         )
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> List[Doctor]:
+    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Doctor], int]:
         """Lista todos os médicos com paginação"""
-        doctors_model = self.db.query(DoctorModel).offset(skip).limit(limit).all()
+        query = self.db.query(DoctorModel)
+        total = query.count()
+        doctors_model = query.offset(skip).limit(limit).all()
 
-        return [
+        doctors = [
             Doctor(
                 id=doctor.id,
                 name=doctor.name,
@@ -88,6 +90,8 @@ class DoctorRepository(IGetDoctorById, IGetDoctorByCRM, IGetDoctorByEmail, ISave
             )
             for doctor in doctors_model
         ]
+
+        return doctors, total
 
     def save(self, doctor: Doctor) -> Doctor:
         """Salva um novo médico no banco de dados"""

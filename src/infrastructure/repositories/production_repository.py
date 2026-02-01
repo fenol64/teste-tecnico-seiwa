@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from typing import Optional, List
+from typing import Optional, List, Tuple
 import uuid
 from datetime import date
 
@@ -35,11 +35,13 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
             updated_at=production_model.updated_at.isoformat() if production_model.updated_at else None
         )
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> List[Production]:
+    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Production], int]:
         """Lista todas as produções com paginação"""
-        productions_model = self.db.query(ProductionModel).offset(skip).limit(limit).all()
+        query = self.db.query(ProductionModel)
+        total = query.count()
+        productions_model = query.offset(skip).limit(limit).all()
 
-        return [
+        productions = [
             Production(
                 id=production.id,
                 doctor_id=production.doctor_id,
@@ -52,6 +54,8 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
             )
             for production in productions_model
         ]
+
+        return productions, total
 
     def get_by_doctor(self, doctor_id: uuid.UUID, skip: int = 0, limit: int = 100) -> List[Production]:
         """Lista todas as produções de um médico específico"""

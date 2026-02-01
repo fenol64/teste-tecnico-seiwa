@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Query
 from typing import List
 from uuid import UUID
 
+from src.dto.pagination import PaginatedResponse
 from src.bootstrap.provider import usecase_factory
 from src.infrastructure.auth.dependencies import get_current_user
 from src.controller.repasse.create_repasse import create_repasse_controller
@@ -41,14 +42,17 @@ async def create_repasse(
 @router.get(
     "/",
     summary="Listar Repasses",
-    description="Retorna todos os repasses cadastrados",
-    response_model=List[RepasseResponseDTO]
+    description="Retorna todos os repasses cadastrados com paginação",
+    response_model=PaginatedResponse[RepasseResponseDTO]
 )
 async def get_all_repasses(
+    page: int = Query(1, ge=1, description="Número da página (começa em 1)"),
+    page_size: int = Query(10, ge=1, le=100, description="Quantidade de itens por página"),
     usecase: GetAllRepassesUseCase = Depends(usecase_factory('get_all_repasses_usecase')),
     current_user=Depends(get_current_user)
 ):
-    return get_all_repasses_controller(usecase)
+    skip = (page - 1) * page_size
+    return get_all_repasses_controller(usecase, skip=skip, limit=page_size)
 
 
 @router.get(

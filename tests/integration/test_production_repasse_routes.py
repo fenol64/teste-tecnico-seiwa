@@ -79,8 +79,13 @@ class TestProductionRoutes:
 
         assert response.status_code == 200
         data = response.json()
-        assert isinstance(data, list)
-        assert len(data) >= 1
+        assert isinstance(data, dict)
+        assert "items" in data
+        assert "total" in data
+        assert "page" in data
+        assert "page_size" in data
+        assert "total_pages" in data
+        assert len(data["items"]) >= 1
 
     def test_get_production_by_id(self, client: TestClient, auth_headers: dict, created_production):
         """Test getting production by ID"""
@@ -193,8 +198,13 @@ class TestRepasseRoutes:
 
         assert response.status_code == 200
         data = response.json()
-        assert isinstance(data, list)
-        assert len(data) >= 1
+        assert isinstance(data, dict)
+        assert "items" in data
+        assert "total" in data
+        assert "page" in data
+        assert "page_size" in data
+        assert "total_pages" in data
+        assert len(data["items"]) >= 1
 
     def test_get_repasses_by_production(self, client: TestClient, auth_headers: dict,
                                         created_production):

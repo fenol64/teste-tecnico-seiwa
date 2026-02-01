@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from uuid import UUID
 from datetime import datetime
 from src.domain.entities.Repasse import Repasse
@@ -12,7 +12,7 @@ class IRepasseRepository(ABC):
         pass
 
     @abstractmethod
-    def get_all(self) -> List[Repasse]:
+    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Repasse], int]:
         pass
 
     @abstractmethod

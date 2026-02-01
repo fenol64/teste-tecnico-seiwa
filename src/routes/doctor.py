@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, status, Query
 from typing import List, Dict, Any
 import uuid
 
+from src.dto.pagination import PaginatedResponse
 from src.bootstrap.provider import usecase_factory
 from src.infrastructure.auth.dependencies import get_current_user
 from src.controller.doctor.create_doctor import CreateDoctorHandler
@@ -45,17 +46,18 @@ async def create_doctor(
     '/',
     summary="Listar Médicos",
     description="Lista todos os médicos cadastrados com paginação",
-    response_model=List[DoctorResponseDTO],
+    response_model=PaginatedResponse[DoctorResponseDTO],
     status_code=status.HTTP_200_OK
 )
 async def get_all_doctors(
-    skip: int = Query(0, ge=0, description="Número de registros a pular"),
-    limit: int = Query(100, ge=1, le=100, description="Número máximo de registros a retornar"),
+    page: int = Query(1, ge=1, description="Número da página (começa em 1)"),
+    page_size: int = Query(10, ge=1, le=100, description="Quantidade de itens por página"),
     usecase: GetAllDoctorsUseCase = Depends(usecase_factory('get_all_doctors_usecase')),
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
+    skip = (page - 1) * page_size
     handler = GetAllDoctorsHandler(get_all_doctors_usecase=usecase)
-    return handler.handle(skip=skip, limit=limit)
+    return handler.handle(skip=skip, limit=page_size)
 
 
 @router.get(

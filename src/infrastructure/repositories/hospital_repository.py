@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from typing import Optional, List
+from typing import Optional, List, Tuple
 import uuid
 
 from src.domain.entities.Hospital import Hospital
@@ -30,11 +30,13 @@ class HospitalRepository(IGetHospitalById, ISaveHospital, IUpdateHospital, IDele
             updated_at=hospital_model.updated_at.isoformat() if hospital_model.updated_at else None
         )
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> List[Hospital]:
+    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Hospital], int]:
         """Lista todos os hospitais com paginação"""
-        hospitals_model = self.db.query(HospitalModel).offset(skip).limit(limit).all()
+        query = self.db.query(HospitalModel)
+        total = query.count()
+        hospitals_model = query.offset(skip).limit(limit).all()
 
-        return [
+        hospitals = [
             Hospital(
                 id=hospital.id,
                 name=hospital.name,
@@ -44,6 +46,8 @@ class HospitalRepository(IGetHospitalById, ISaveHospital, IUpdateHospital, IDele
             )
             for hospital in hospitals_model
         ]
+
+        return hospitals, total
 
     def save(self, hospital: Hospital) -> Hospital:
         """Salva um novo hospital no banco de dados"""
