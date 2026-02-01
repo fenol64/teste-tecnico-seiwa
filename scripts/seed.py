@@ -122,7 +122,7 @@ def seed():
 
             repasse = RepasseModel(
                 production_id=prod.id,
-                valor=Decimal(random.uniform(100.0, 5000.0)),
+                amount=Decimal(random.uniform(100.0, 5000.0)),
                 status=random.choice(list(RepasseStatus)),
                 created_at=datetime.now(timezone.utc)
             )

@@ -8,8 +8,8 @@ from src.infrastructure.database.connection import Base
 
 
 class ProductionType(str, enum.Enum):
-    SHIFT = "SHIFT"
-    CONSULTATION = "CONSULTATION"
+    SHIFT = "shift"
+    CONSULTATION = "consultation"
 
 
 class ProductionModel(Base):
