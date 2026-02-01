@@ -14,4 +14,4 @@ class RepasseModel(Base):
     valor = Column(Numeric(10, 2), nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
-    status = Column(SAEnum(RepasseStatus), default=RepasseStatus.PENDENTE, nullable=False)
+    status = Column(SAEnum(RepasseStatus), default=RepasseStatus.PENDING, nullable=False)

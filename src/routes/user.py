@@ -8,17 +8,17 @@ router = APIRouter()
 
 @router.get(
     "/me",
-    summary="Obter Dados do Usuário Atual",
-    description="Retorna os dados do usuário autenticado (rota protegida)",
+    summary="Get Current User Data",
+    description="Returns the authenticated user data (protected route)",
     response_model=UserData,
     status_code=status.HTTP_200_OK,
     responses={
         200: {
-            "description": "Dados do usuário retornados com sucesso",
+            "description": "User data returned successfully",
             "model": UserData
         },
         401: {
-            "description": "Token inválido ou ausente",
+            "description": "Invalid or missing token",
             "content": {
                 "application/json": {
                     "example": {"detail": "Invalid authentication credentials"}
@@ -29,11 +29,11 @@ router = APIRouter()
 )
 async def get_me(current_user: Dict[str, Any] = Depends(get_current_user)):
     """
-    Rota protegida que retorna os dados do usuário autenticado.
+    Protected route that returns the authenticated user's data.
 
-    Requer um token JWT válido no header Authorization: Bearer <token>
+    Requires a valid JWT token in the Authorization header: Bearer <token>
 
-    O token é obtido após fazer login com sucesso na rota /api/v1/signin
+    The token is obtained after successful login at /api/v1/signin
     """
     return {
         "id": current_user.get("sub"),

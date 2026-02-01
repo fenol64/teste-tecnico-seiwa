@@ -13,7 +13,7 @@ class TestProductionRoutes:
         production_data = {
             "doctor_id": str(created_doctor.id),
             "hospital_id": str(created_hospital.id),
-            "type": "plantao",
+            "type": "shift",
             "date": "2024-01-15",
             "description": "Plantão noturno"
         }
@@ -28,7 +28,7 @@ class TestProductionRoutes:
         data = response.json()
         assert data["doctor_id"] == str(created_doctor.id)
         assert data["hospital_id"] == str(created_hospital.id)
-        assert data["type"] == "plantao"
+        assert data["type"] == "shift"
 
     def test_create_production_invalid_doctor(self, client: TestClient, auth_headers: dict,
                                               created_hospital):
@@ -36,7 +36,7 @@ class TestProductionRoutes:
         production_data = {
             "doctor_id": str(uuid4()),
             "hospital_id": str(created_hospital.id),
-            "type": "plantao",
+            "type": "shift",
             "date": "2024-01-15",
             "description": "Test"
         }
@@ -56,7 +56,7 @@ class TestProductionRoutes:
         production_data = {
             "doctor_id": str(created_doctor.id),
             "hospital_id": str(uuid4()),
-            "type": "plantao",
+            "type": "shift",
             "date": "2024-01-15",
             "description": "Test"
         }
@@ -129,7 +129,7 @@ class TestProductionRoutes:
     def test_update_production(self, client: TestClient, auth_headers: dict, created_production):
         """Test updating production"""
         update_data = {
-            "type": "consulta",
+            "type": "consultation",
             "date": "2024-01-16",
             "description": "Updated description"
         }
@@ -142,7 +142,7 @@ class TestProductionRoutes:
 
         assert response.status_code == 200
         data = response.json()
-        assert data["type"] == "consulta"
+        assert data["type"] == "consultation"
         assert data["description"] == "Updated description"
 
     def test_delete_production(self, client: TestClient, auth_headers: dict, created_production):
@@ -163,7 +163,7 @@ class TestRepasseRoutes:
         """Test successful repasse creation"""
         repasse_data = {
             "production_id": str(created_production.id),
-            "valor": 1500.00
+            "amount": 1500.00
         }
 
         response = client.post(
@@ -175,13 +175,13 @@ class TestRepasseRoutes:
         assert response.status_code == 201
         data = response.json()
         assert data["production_id"] == str(created_production.id)
-        assert float(data["valor"]) == 1500.00
+        assert float(data["amount"]) == 1500.00
 
     def test_create_repasse_invalid_production(self, client: TestClient, auth_headers: dict):
         """Test repasse creation with invalid production"""
         repasse_data = {
             "production_id": str(uuid4()),
-            "valor": 1500.00
+            "amount": 1500.00
         }
 
         response = client.post(
@@ -200,7 +200,7 @@ class TestRepasseRoutes:
             "/api/v1/repasses/",
             json={
                 "production_id": str(created_production.id),
-                "valor": 1500.00
+                "amount": 1500.00
             },
             headers=auth_headers
         )
@@ -228,7 +228,7 @@ class TestRepasseRoutes:
             "/api/v1/repasses/",
             json={
                 "production_id": str(created_production.id),
-                "valor": 1500.00
+                "amount": 1500.00
             },
             headers=auth_headers
         )
@@ -252,7 +252,7 @@ class TestRepasseRoutes:
             "/api/v1/repasses/",
             json={
                 "production_id": str(created_production.id),
-                "valor": 1500.00
+                "amount": 1500.00
             },
             headers=auth_headers
         )
@@ -278,14 +278,14 @@ class TestRepasseRoutes:
             "/api/v1/repasses/",
             json={
                 "production_id": str(created_production.id),
-                "valor": 1500.00
+                "amount": 1500.00
             },
             headers=auth_headers
         )
         repasse_id = create_response.json()["id"]
 
         # Update repasse
-        update_data = {"valor": 2000.00}
+        update_data = {"amount": 2000.00}
         response = client.put(
             f"/api/v1/repasses/{repasse_id}",
             json=update_data,
@@ -294,7 +294,7 @@ class TestRepasseRoutes:
 
         assert response.status_code == 200
         data = response.json()
-        assert float(data["valor"]) == 2000.00
+        assert float(data["amount"]) == 2000.00
 
     def test_delete_repasse(self, client: TestClient, auth_headers: dict, created_production):
         """Test deleting repasse"""
@@ -303,7 +303,7 @@ class TestRepasseRoutes:
             "/api/v1/repasses/",
             json={
                 "production_id": str(created_production.id),
-                "valor": 1500.00
+                "amount": 1500.00
             },
             headers=auth_headers
         )

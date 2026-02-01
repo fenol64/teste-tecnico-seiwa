@@ -18,25 +18,25 @@ class GetRepasseStatsUseCase:
     ) -> RepasseStatsDTO:
         repasses = self.repasse_repository.get_by_doctor_and_date_range(doctor_id, start_date, end_date)
 
-        pendente_qtd = 0
-        pendente_valor = Decimal(0)
-        consolidado_qtd = 0
-        consolidado_valor = Decimal(0)
+        pending_count = 0
+        pending_value = Decimal(0)
+        consolidated_count = 0
+        consolidated_value = Decimal(0)
 
         for repasse in repasses:
-            if repasse.status == RepasseStatus.PENDENTE:
-                pendente_qtd += 1
-                pendente_valor += repasse.valor
-            elif repasse.status == RepasseStatus.CONSOLIDADO:
-                consolidado_qtd += 1
-                consolidado_valor += repasse.valor
+            if repasse.status == RepasseStatus.PENDING:
+                pending_count += 1
+                pending_value += repasse.amount
+            elif repasse.status == RepasseStatus.CONSOLIDATED:
+                consolidated_count += 1
+                consolidated_value += repasse.amount
 
         return RepasseStatsDTO(
             doctor_id=doctor_id,
-            periodo_inicio=start_date,
-            periodo_fim=end_date,
-            total_pendente_qtd=pendente_qtd,
-            total_pendente_valor=pendente_valor,
-            total_consolidado_qtd=consolidado_qtd,
-            total_consolidado_valor=consolidado_valor
+            period_start=start_date,
+            period_end=end_date,
+            total_pending_count=pending_count,
+            total_pending_value=pending_value,
+            total_consolidated_count=consolidated_count,
+            total_consolidated_value=consolidated_value
         )

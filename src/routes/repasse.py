@@ -28,8 +28,8 @@ router = APIRouter()
 
 @router.post(
     "/",
-    summary="Criar Repasse",
-    description="Registra um novo repasse médico vinculado a uma produção",
+    summary="Create Repasse",
+    description="Registers a new medical repasse linked to a production",
     response_model=RepasseResponseDTO,
     status_code=status.HTTP_201_CREATED
 )
@@ -43,13 +43,13 @@ async def create_repasse(
 
 @router.get(
     "/",
-    summary="Listar Repasses",
-    description="Retorna todos os repasses cadastrados com paginação",
+    summary="List Repasses",
+    description="Returns all registered repasses with pagination",
     response_model=PaginatedResponse[RepasseResponseDTO]
 )
 async def get_all_repasses(
-    page: int = Query(1, ge=1, description="Número da página (começa em 1)"),
-    page_size: int = Query(10, ge=1, le=100, description="Quantidade de itens por página"),
+    page: int = Query(1, ge=1, description="Page number (starts at 1)"),
+    page_size: int = Query(10, ge=1, le=100, description="Items per page"),
     usecase: GetAllRepassesUseCase = Depends(usecase_factory('get_all_repasses_usecase')),
     current_user=Depends(get_current_user)
 ):
@@ -59,8 +59,8 @@ async def get_all_repasses(
 
 @router.get(
     "/{repasse_id}",
-    summary="Buscar Repasse por ID",
-    description="Retorna um repasse específico pelo ID",
+    summary="Get Repasse by ID",
+    description="Returns a specific repasse by ID",
     response_model=RepasseResponseDTO
 )
 async def get_repasse_by_id(
@@ -73,8 +73,8 @@ async def get_repasse_by_id(
 
 @router.get(
     "/production/{production_id}",
-    summary="Listar Repasses por Produção",
-    description="Retorna todos os repasses vinculados a uma produção específica",
+    summary="List Repasses by Production",
+    description="Returns all repasses linked to a specific production",
     response_model=List[RepasseResponseDTO]
 )
 async def get_repasses_by_production(
@@ -87,8 +87,8 @@ async def get_repasses_by_production(
 
 @router.get(
     "/hospital/{hospital_id}",
-    summary="Listar Repasses por Hospital",
-    description="Retorna todos os repasses vinculados a um hospital específico",
+    summary="List Repasses by Hospital",
+    description="Returns all repasses linked to a specific hospital",
     response_model=List[RepasseResponseDTO]
 )
 async def get_repasses_by_hospital(
@@ -101,8 +101,8 @@ async def get_repasses_by_hospital(
 
 @router.put(
     "/{repasse_id}",
-    summary="Atualizar Repasse",
-    description="Atualiza o valor de um repasse existente",
+    summary="Update Repasse",
+    description="Updates the value of an existing repasse",
     response_model=RepasseResponseDTO
 )
 async def update_repasse(
@@ -116,8 +116,8 @@ async def update_repasse(
 
 @router.delete(
     "/{repasse_id}",
-    summary="Deletar Repasse",
-    description="Remove um repasse do sistema",
+    summary="Delete Repasse",
+    description="Removes a repasse from the system",
     response_model=DeleteResponseDTO
 )
 async def delete_repasse(
@@ -133,6 +133,6 @@ router.add_api_route(
     get_repasse_stats,
     methods=["GET"],
     response_model=RepasseStatsDTO,
-    summary="Estatísticas de repasses do médico",
-    description="Retorna estatísticas de repasses (pendentes vs consolidados) para um médico em um intervalo de datas"
+    summary="Doctor Repasse Statistics",
+    description="Returns repasse statistics (pending vs consolidated) for a doctor in a date range"
 )

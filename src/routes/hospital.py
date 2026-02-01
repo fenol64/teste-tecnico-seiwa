@@ -23,8 +23,8 @@ router = APIRouter()
 
 @router.post(
     '/',
-    summary="Criar Hospital",
-    description="Cria um novo hospital no sistema",
+    summary="Create Hospital",
+    description="Creates a new hospital in the system",
     response_model=HospitalResponseDTO,
     status_code=status.HTTP_201_CREATED
 )
@@ -39,14 +39,14 @@ async def create_hospital(
 
 @router.get(
     '/',
-    summary="Listar Hospitais",
-    description="Lista todos os hospitais cadastrados com paginação",
+    summary="List Hospitals",
+    description="Lists all registered hospitals with pagination",
     response_model=PaginatedResponse[HospitalResponseDTO],
     status_code=status.HTTP_200_OK
 )
 async def get_all_hospitals(
-    page: int = Query(1, ge=1, description="Número da página (começa em 1)"),
-    page_size: int = Query(10, ge=1, le=100, description="Quantidade de itens por página"),
+    page: int = Query(1, ge=1, description="Page number (starts at 1)"),
+    page_size: int = Query(10, ge=1, le=100, description="Items per page"),
     usecase: GetAllHospitalsUseCase = Depends(usecase_factory('get_all_hospitals_usecase')),
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
@@ -57,8 +57,8 @@ async def get_all_hospitals(
 
 @router.get(
     '/{hospital_id}',
-    summary="Obter Hospital por ID",
-    description="Retorna os dados de um hospital específico",
+    summary="Get Hospital by ID",
+    description="Returns data for a specific hospital",
     response_model=HospitalResponseDTO,
     status_code=status.HTTP_200_OK
 )
@@ -73,8 +73,8 @@ async def get_hospital_by_id(
 
 @router.put(
     '/{hospital_id}',
-    summary="Atualizar Hospital",
-    description="Atualiza os dados de um hospital existente",
+    summary="Update Hospital",
+    description="Updates data of an existing hospital",
     response_model=HospitalResponseDTO,
     status_code=status.HTTP_200_OK
 )
@@ -90,8 +90,8 @@ async def update_hospital(
 
 @router.delete(
     '/{hospital_id}',
-    summary="Deletar Hospital",
-    description="Remove um hospital do sistema",
+    summary="Delete Hospital",
+    description="Removes a hospital from the system",
     status_code=status.HTTP_200_OK
 )
 async def delete_hospital(
@@ -105,8 +105,8 @@ async def delete_hospital(
 
 @router.get(
     '/{hospital_id}/doctors',
-    summary="Listar Médicos de um Hospital",
-    description="Retorna todos os médicos que atuam em um hospital",
+    summary="List Doctors by Hospital",
+    description="Returns all doctors working at a hospital",
     status_code=status.HTTP_200_OK
 )
 async def get_doctors_by_hospital(

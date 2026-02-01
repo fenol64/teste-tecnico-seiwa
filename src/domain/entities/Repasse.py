@@ -10,14 +10,14 @@ class Repasse:
         self,
         id: UUID,
         production_id: UUID,
-        valor: Decimal,
+        amount: Decimal,
         created_at: datetime,
         updated_at: datetime,
-        status: RepasseStatus = RepasseStatus.PENDENTE
+        status: RepasseStatus = RepasseStatus.PENDING
     ):
         self.id = id
         self.production_id = production_id
-        self.valor = valor
+        self.amount = amount
         self.created_at = created_at
         self.updated_at = updated_at
         self.status = status

@@ -7,30 +7,30 @@ from src.domain.enums.repasse_status import RepasseStatus
 
 
 class CreateRepasseDTO(BaseModel):
-    production_id: UUID = Field(..., description="ID da produção")
-    valor: Decimal = Field(..., gt=0, description="Valor do repasse")
-    status: Optional[RepasseStatus] = Field(default=RepasseStatus.PENDENTE, description="Status do repasse")
+    production_id: UUID = Field(..., description="Production ID")
+    amount: Decimal = Field(..., gt=0, description="Payment amount")
+    status: Optional[RepasseStatus] = Field(default=RepasseStatus.PENDING, description="Payment status")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
                 "production_id": "123e4567-e89b-12d3-a456-426614174000",
-                "valor": 1500.00,
-                "status": "pendente"
+                "amount": 1500.00,
+                "status": "pending"
             }
         }
     )
 
 
 class UpdateRepasseDTO(BaseModel):
-    valor: Optional[Decimal] = Field(None, gt=0, description="Valor do repasse")
-    status: Optional[RepasseStatus] = Field(None, description="Status do repasse")
+    amount: Optional[Decimal] = Field(None, gt=0, description="Payment amount")
+    status: Optional[RepasseStatus] = Field(None, description="Payment status")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "valor": 1800.00,
-                "status": "consolidado"
+                "amount": 1800.00,
+                "status": "consolidated"
             }
         }
     )
@@ -39,7 +39,7 @@ class UpdateRepasseDTO(BaseModel):
 class RepasseResponseDTO(BaseModel):
     id: UUID
     production_id: UUID
-    valor: Decimal
+    amount: Decimal
     status: RepasseStatus
     created_at: datetime
     updated_at: Optional[datetime] = None
@@ -50,8 +50,8 @@ class RepasseResponseDTO(BaseModel):
             "example": {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
                 "production_id": "123e4567-e89b-12d3-a456-426614174001",
-                "valor": 1500.00,
-                "status": "pendente",
+                "amount": 1500.00,
+                "status": "pending",
                 "created_at": "2024-01-01T10:00:00",
                 "updated_at": "2024-01-01T10:00:00"
             }
@@ -61,9 +61,9 @@ class RepasseResponseDTO(BaseModel):
 
 class RepasseStatsDTO(BaseModel):
     doctor_id: UUID
-    periodo_inicio: Optional[datetime]
-    periodo_fim: Optional[datetime]
-    total_pendente_qtd: int
-    total_pendente_valor: Decimal
-    total_consolidado_qtd: int
-    total_consolidado_valor: Decimal
+    period_start: Optional[datetime]
+    period_end: Optional[datetime]
+    total_pending_count: int
+    total_pending_value: Decimal
+    total_consolidated_count: int
+    total_consolidated_value: Decimal

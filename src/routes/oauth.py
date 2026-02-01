@@ -12,17 +12,17 @@ router = APIRouter()
 
 @router.post(
     '/signup',
-    summary="Cadastro de Usuário",
-    description="Cria um novo usuário no sistema com email e senha",
+    summary="User Registration",
+    description="Creates a new user in the system with email and password",
     response_model=SignUpResponse,
     status_code=status.HTTP_201_CREATED,
     responses={
         201: {
-            "description": "Usuário cadastrado com sucesso",
+            "description": "User registered successfully",
             "model": SignUpResponse
         },
         400: {
-            "description": "Dados inválidos ou email já cadastrado",
+            "description": "Invalid data or email already registered",
             "model": ErrorResponse,
             "content": {
                 "application/json": {
@@ -31,7 +31,7 @@ router = APIRouter()
             }
         },
         422: {
-            "description": "Erro de validação",
+            "description": "Validation Error",
             "content": {
                 "application/json": {
                     "example": {
@@ -47,11 +47,11 @@ router = APIRouter()
             }
         },
         500: {
-            "description": "Erro interno do servidor",
+            "description": "Internal Server Error",
             "model": ErrorResponse,
             "content": {
                 "application/json": {
-                    "example": {"detail": "Erro interno ao cadastrar usuário"}
+                    "example": {"detail": "Internal error while registering user"}
                 }
             }
         }
@@ -67,17 +67,17 @@ async def signup(
 
 @router.post(
     '/signin',
-    summary="Login de Usuário",
-    description="Autentica um usuário existente no sistema",
+    summary="User Login",
+    description="Authenticates an existing user in the system",
     response_model=SignInResponse,
     status_code=status.HTTP_200_OK,
     responses={
         200: {
-            "description": "Login realizado com sucesso",
+            "description": "Login successful",
             "model": SignInResponse
         },
         400: {
-            "description": "Credenciais inválidas",
+            "description": "Invalid credentials",
             "model": ErrorResponse,
             "content": {
                 "application/json": {
@@ -86,7 +86,7 @@ async def signup(
             }
         },
         422: {
-            "description": "Erro de validação",
+            "description": "Validation Error",
             "content": {
                 "application/json": {
                     "example": {
@@ -102,11 +102,11 @@ async def signup(
             }
         },
         500: {
-            "description": "Erro interno do servidor",
+            "description": "Internal Server Error",
             "model": ErrorResponse,
             "content": {
                 "application/json": {
-                    "example": {"detail": "Erro interno ao fazer login"}
+                    "example": {"detail": "Internal error during login"}
                 }
             }
         }

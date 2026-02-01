@@ -2,49 +2,49 @@ from pydantic import BaseModel, Field, ConfigDict
 
 
 class SuccessResponse(BaseModel):
-    """Resposta padrão de sucesso"""
-    message: str = Field(..., description="Mensagem de sucesso")
+    """Standard success response"""
+    message: str = Field(..., description="Success message")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "message": "Operação realizada com sucesso"
+                "message": "Operation performed successfully"
             }
         }
     )
 
 
 class SignUpResponse(BaseModel):
-    """Resposta do cadastro de usuário"""
-    message: str = Field(..., description="Mensagem de confirmação")
-    email: str = Field(..., description="Email do usuário cadastrado")
+    """User registration response"""
+    message: str = Field(..., description="Confirmation message")
+    email: str = Field(..., description="Registered user email")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "message": "Usuário cadastrado com sucesso!",
-                "email": "usuario@exemplo.com"
+                "message": "User registered successfully!",
+                "email": "user@example.com"
             }
         }
     )
 
 
 class ErrorResponse(BaseModel):
-    """Resposta padrão de erro"""
-    detail: str = Field(..., description="Detalhes do erro")
+    """Standard error response"""
+    detail: str = Field(..., description="Error details")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "detail": "Erro ao processar a requisição"
+                "detail": "Error processing request"
             }
         }
     )
 
 
 class HealthCheckResponse(BaseModel):
-    """Resposta do health check"""
-    status: str = Field(..., description="Status da aplicação")
+    """Health check response"""
+    status: str = Field(..., description="Application status")
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -56,28 +56,28 @@ class HealthCheckResponse(BaseModel):
 
 
 class UserData(BaseModel):
-    """Dados do usuário"""
-    id: str = Field(..., description="ID único do usuário")
-    name: str = Field(..., description="Nome do usuário")
-    email: str = Field(..., description="Email do usuário")
+    """User data"""
+    id: str = Field(..., description="User unique ID")
+    name: str = Field(..., description="User name")
+    email: str = Field(..., description="User email")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
-                "name": "João Silva",
-                "email": "joao.silva@exemplo.com"
+                "name": "John Doe",
+                "email": "john.doe@example.com"
             }
         }
     )
 
 
 class SignInResponse(BaseModel):
-    """Resposta do login de usuário"""
-    message: str = Field(..., description="Mensagem de confirmação")
-    access_token: str = Field(..., description="Token JWT de acesso")
-    token_type: str = Field(default="bearer", description="Tipo do token")
-    user: UserData = Field(..., description="Dados do usuário autenticado")
+    """User login response"""
+    message: str = Field(..., description="Confirmation message")
+    access_token: str = Field(..., description="JWT Access Token")
+    token_type: str = Field(default="bearer", description="Token type")
+    user: UserData = Field(..., description="Authenticated user data")
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -87,8 +87,8 @@ class SignInResponse(BaseModel):
                 "token_type": "bearer",
                 "user": {
                     "id": "123e4567-e89b-12d3-a456-426614174000",
-                    "name": "João Silva",
-                    "email": "joao.silva@exemplo.com"
+                    "name": "John Doe",
+                    "email": "john.doe@example.com"
                 }
             }
         }
@@ -96,13 +96,13 @@ class SignInResponse(BaseModel):
 
 
 class DeleteResponseDTO(BaseModel):
-    """Resposta padrão de deleção"""
-    message: str = Field(..., description="Mensagem de confirmação da deleção")
+    """Standard deletion response"""
+    message: str = Field(..., description="Deletion confirmation message")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "message": "Registro deletado com sucesso"
+                "message": "Record deleted successfully"
             }
         }
     )

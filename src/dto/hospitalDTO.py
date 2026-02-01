@@ -3,37 +3,37 @@ from pydantic import BaseModel, Field, ConfigDict
 
 
 class CreateHospitalDTO(BaseModel):
-    """DTO para criação de novo hospital"""
-    name: str = Field(..., min_length=3, max_length=200, description="Nome do hospital")
-    address: str = Field(..., min_length=5, max_length=300, description="Endereço completo do hospital")
+    """DTO for creating a new hospital"""
+    name: str = Field(..., min_length=3, max_length=200, description="Hospital name")
+    address: str = Field(..., min_length=5, max_length=300, description="Hospital full address")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "name": "Hospital Santa Casa",
-                "address": "Rua das Flores, 123 - Centro, São Paulo - SP"
+                "name": "General Hospital",
+                "address": "123 Flower St, City, State"
             }
         }
     )
 
 
 class UpdateHospitalDTO(BaseModel):
-    """DTO para atualização de hospital"""
-    name: str | None = Field(None, min_length=3, max_length=200, description="Nome do hospital")
-    address: str | None = Field(None, min_length=5, max_length=300, description="Endereço completo do hospital")
+    """DTO for updating a hospital"""
+    name: str | None = Field(None, min_length=3, max_length=200, description="Hospital name")
+    address: str | None = Field(None, min_length=5, max_length=300, description="Hospital full address")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "name": "Hospital Santa Casa",
-                "address": "Rua das Flores, 123 - Centro, São Paulo - SP"
+                "name": "General Hospital",
+                "address": "123 Flower St, City, State"
             }
         }
     )
 
 
 class HospitalResponseDTO(BaseModel):
-    """DTO de resposta com dados do hospital"""
+    """Response DTO with hospital data"""
     id: str
     name: str
     address: str
@@ -44,8 +44,8 @@ class HospitalResponseDTO(BaseModel):
         json_schema_extra={
             "example": {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
-                "name": "Hospital Santa Casa",
-                "address": "Rua das Flores, 123 - Centro, São Paulo - SP",
+                "name": "General Hospital",
+                "address": "123 Flower St, City, State",
                 "created_at": "2026-01-30T10:00:00",
                 "updated_at": None
             }

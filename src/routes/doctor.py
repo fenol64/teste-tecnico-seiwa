@@ -28,8 +28,8 @@ router = APIRouter()
 
 @router.post(
     '/',
-    summary="Criar Médico",
-    description="Cria um novo médico no sistema",
+    summary="Create Doctor",
+    description="Creates a new doctor in the system",
     response_model=DoctorResponseDTO,
     status_code=status.HTTP_201_CREATED
 )
@@ -44,14 +44,14 @@ async def create_doctor(
 
 @router.get(
     '/',
-    summary="Listar Médicos",
-    description="Lista todos os médicos cadastrados com paginação",
+    summary="List Doctors",
+    description="Lists all registered doctors with pagination",
     response_model=PaginatedResponse[DoctorResponseDTO],
     status_code=status.HTTP_200_OK
 )
 async def get_all_doctors(
-    page: int = Query(1, ge=1, description="Número da página (começa em 1)"),
-    page_size: int = Query(10, ge=1, le=100, description="Quantidade de itens por página"),
+    page: int = Query(1, ge=1, description="Page number (starts at 1)"),
+    page_size: int = Query(10, ge=1, le=100, description="Items per page"),
     usecase: GetAllDoctorsUseCase = Depends(usecase_factory('get_all_doctors_usecase')),
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
@@ -62,8 +62,8 @@ async def get_all_doctors(
 
 @router.get(
     '/{doctor_id}',
-    summary="Obter Médico por ID",
-    description="Retorna os dados de um médico específico",
+    summary="Get Doctor by ID",
+    description="Returns data for a specific doctor",
     response_model=DoctorResponseDTO,
     status_code=status.HTTP_200_OK
 )
@@ -78,8 +78,8 @@ async def get_doctor_by_id(
 
 @router.put(
     '/{doctor_id}',
-    summary="Atualizar Médico",
-    description="Atualiza os dados de um médico existente",
+    summary="Update Doctor",
+    description="Updates data of an existing doctor",
     response_model=DoctorResponseDTO,
     status_code=status.HTTP_200_OK
 )
@@ -95,8 +95,8 @@ async def update_doctor(
 
 @router.delete(
     '/{doctor_id}',
-    summary="Deletar Médico",
-    description="Remove um médico do sistema",
+    summary="Delete Doctor",
+    description="Removes a doctor from the system",
     status_code=status.HTTP_200_OK
 )
 async def delete_doctor(
@@ -110,8 +110,8 @@ async def delete_doctor(
 
 @router.post(
     '/{doctor_id}/hospitals/{hospital_id}',
-    summary="Vincular Médico a Hospital",
-    description="Cria um vínculo entre médico e hospital",
+    summary="Assign Doctor to Hospital",
+    description="Creates a link between doctor and hospital",
     response_model=DoctorHospitalResponseDTO,
     status_code=status.HTTP_201_CREATED
 )
@@ -127,8 +127,8 @@ async def assign_doctor_to_hospital(
 
 @router.delete(
     '/{doctor_id}/hospitals/{hospital_id}',
-    summary="Remover Médico de Hospital",
-    description="Remove o vínculo entre médico e hospital",
+    summary="Remove Doctor from Hospital",
+    description="Removes the link between doctor and hospital",
     status_code=status.HTTP_200_OK
 )
 async def remove_doctor_from_hospital(
@@ -143,8 +143,8 @@ async def remove_doctor_from_hospital(
 
 @router.get(
     '/{doctor_id}/hospitals',
-    summary="Listar Hospitais de um Médico",
-    description="Retorna todos os hospitais onde um médico atua",
+    summary="List Hospitals by Doctor",
+    description="Returns all hospitals where a doctor works",
     status_code=status.HTTP_200_OK
 )
 async def get_hospitals_by_doctor(

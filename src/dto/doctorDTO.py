@@ -3,19 +3,19 @@ from pydantic import BaseModel, Field, EmailStr, ConfigDict
 
 
 class CreateDoctorDTO(BaseModel):
-    """DTO para criação de novo médico"""
-    name: str = Field(..., min_length=3, max_length=100, description="Nome completo do médico")
-    crm: str = Field(..., min_length=4, max_length=20, description="Número do CRM do médico")
-    specialty: str = Field(..., min_length=3, max_length=100, description="Especialidade médica")
-    phone: str | None = Field(None, max_length=20, description="Telefone do médico (opcional)")
-    email: EmailStr = Field(..., description="Email do médico (deve ser válido)")
+    """DTO for creating a new doctor"""
+    name: str = Field(..., min_length=3, max_length=100, description="Doctor's full name")
+    crm: str = Field(..., min_length=4, max_length=20, description="Doctor's CRM number")
+    specialty: str = Field(..., min_length=3, max_length=100, description="Medical specialty")
+    phone: str | None = Field(None, max_length=20, description="Doctor's phone (optional)")
+    email: EmailStr = Field(..., description="Doctor's email (must be valid)")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
                 "name": "Dr. Carlos Mendes",
                 "crm": "123456",
-                "specialty": "Cardiologia",
+                "specialty": "Cardiology",
                 "phone": "(11) 98765-4321",
                 "email": "carlos.mendes@hospital.com"
             }
@@ -24,17 +24,17 @@ class CreateDoctorDTO(BaseModel):
 
 
 class UpdateDoctorDTO(BaseModel):
-    """DTO para atualização de médico"""
-    name: str | None = Field(None, min_length=3, max_length=100, description="Nome completo do médico")
-    specialty: str | None = Field(None, min_length=3, max_length=100, description="Especialidade médica")
-    phone: str | None = Field(None, max_length=20, description="Telefone do médico")
-    email: EmailStr | None = Field(None, description="Email do médico")
+    """DTO for updating a doctor"""
+    name: str | None = Field(None, min_length=3, max_length=100, description="Doctor's full name")
+    specialty: str | None = Field(None, min_length=3, max_length=100, description="Medical specialty")
+    phone: str | None = Field(None, max_length=20, description="Doctor's phone")
+    email: EmailStr | None = Field(None, description="Doctor's email")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
                 "name": "Dr. Carlos Mendes",
-                "specialty": "Cardiologia",
+                "specialty": "Cardiology",
                 "phone": "(11) 98765-4321",
                 "email": "carlos.mendes@hospital.com"
             }
@@ -43,7 +43,7 @@ class UpdateDoctorDTO(BaseModel):
 
 
 class DoctorResponseDTO(BaseModel):
-    """DTO de resposta com dados do médico"""
+    """Response DTO with doctor data"""
     id: str
     name: str
     crm: str

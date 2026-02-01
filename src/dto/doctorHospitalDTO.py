@@ -3,9 +3,9 @@ from pydantic import BaseModel, Field, ConfigDict
 
 
 class AssignDoctorToHospitalDTO(BaseModel):
-    """DTO para vincular médico a hospital"""
-    doctor_id: str = Field(..., description="ID do médico")
-    hospital_id: str = Field(..., description="ID do hospital")
+    """DTO for assigning doctor to hospital"""
+    doctor_id: str = Field(..., description="Doctor ID")
+    hospital_id: str = Field(..., description="Hospital ID")
 
     model_config = ConfigDict(
         json_schema_extra={

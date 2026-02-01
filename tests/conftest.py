@@ -193,7 +193,7 @@ def created_production(db_session: Session, created_doctor: DoctorModel, created
     production = ProductionModel(
         doctor_id=created_doctor.id,
         hospital_id=created_hospital.id,
-        type=ProductionType.PLANTAO,
+        type=ProductionType.SHIFT,
         date=date(2024, 1, 15),
         description="Test production"
     )

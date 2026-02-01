@@ -5,50 +5,50 @@ from enum import Enum
 
 
 class ProductionType(str, Enum):
-    PLANTAO = "plantao"
-    CONSULTA = "consulta"
+    SHIFT = "shift"
+    CONSULTATION = "consultation"
 
 
 class CreateProductionDTO(BaseModel):
-    """DTO para criação de nova produção"""
-    doctor_id: str = Field(..., description="ID do médico")
-    hospital_id: str = Field(..., description="ID do hospital")
-    type: ProductionType = Field(..., description="Tipo de produção (plantao ou consulta)")
-    date: date_type = Field(..., description="Data da produção")
-    description: str | None = Field(None, max_length=500, description="Descrição adicional (opcional)")
+    """DTO for creating a new production"""
+    doctor_id: str = Field(..., description="Doctor ID")
+    hospital_id: str = Field(..., description="Hospital ID")
+    type: ProductionType = Field(..., description="Production type (shift or consultation)")
+    date: date_type = Field(..., description="Production date")
+    description: str | None = Field(None, max_length=500, description="Additional description (optional)")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
                 "doctor_id": "123e4567-e89b-12d3-a456-426614174000",
                 "hospital_id": "987e6543-e21b-12d3-a456-426614174999",
-                "type": "plantao",
+                "type": "shift",
                 "date": "2026-01-30",
-                "description": "Plantão noturno no pronto socorro"
+                "description": "Night shift at ER"
             }
         }
     )
 
 
 class UpdateProductionDTO(BaseModel):
-    """DTO para atualização de produção"""
-    type: ProductionType | None = Field(None, description="Tipo de produção (plantao ou consulta)")
-    date: date_type | None = Field(None, description="Data da produção")
-    description: str | None = Field(None, max_length=500, description="Descrição adicional")
+    """DTO for updating a production"""
+    type: ProductionType | None = Field(None, description="Production type (shift or consultation)")
+    date: date_type | None = Field(None, description="Production date")
+    description: str | None = Field(None, max_length=500, description="Additional description")
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "type": "consulta",
+                "type": "consultation",
                 "date": "2026-01-31",
-                "description": "Consulta de rotina"
+                "description": "Routine consultation"
             }
         }
     )
 
 
 class ProductionResponseDTO(BaseModel):
-    """DTO de resposta com dados da produção"""
+    """DTO for production response data"""
     id: str
     doctor_id: str
     hospital_id: str
@@ -64,9 +64,9 @@ class ProductionResponseDTO(BaseModel):
                 "id": "123e4567-e89b-12d3-a456-426614174000",
                 "doctor_id": "987e6543-e21b-12d3-a456-426614174999",
                 "hospital_id": "456e7890-a12b-34c5-d678-901234567890",
-                "type": "plantao",
+                "type": "shift",
                 "date": "2026-01-30",
-                "description": "Plantão noturno no pronto socorro",
+                "description": "Night shift at ER",
                 "created_at": "2026-01-30T10:00:00",
                 "updated_at": None
             }

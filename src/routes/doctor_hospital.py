@@ -18,8 +18,8 @@ router = APIRouter()
 
 @router.post(
     '/assign',
-    summary="Vincular Médico a Hospital",
-    description="Cria um vínculo entre médico e hospital",
+    summary="Assign Doctor to Hospital",
+    description="Creates a link between doctor and hospital",
     response_model=DoctorHospitalResponseDTO,
     status_code=status.HTTP_201_CREATED
 )
@@ -34,8 +34,8 @@ async def assign_doctor_to_hospital(
 
 @router.delete(
     '/remove/{doctor_id}/{hospital_id}',
-    summary="Remover Médico de Hospital",
-    description="Remove o vínculo entre médico e hospital",
+    summary="Remove Doctor from Hospital",
+    description="Removes the link between doctor and hospital",
     status_code=status.HTTP_200_OK
 )
 async def remove_doctor_from_hospital(
@@ -50,8 +50,8 @@ async def remove_doctor_from_hospital(
 
 @router.get(
     '/doctor/{doctor_id}/hospitals',
-    summary="Listar Hospitais de um Médico",
-    description="Retorna todos os hospitais onde um médico atua",
+    summary="List Hospitals by Doctor",
+    description="Returns all hospitals where a doctor works",
     status_code=status.HTTP_200_OK
 )
 async def get_hospitals_by_doctor(
@@ -65,8 +65,8 @@ async def get_hospitals_by_doctor(
 
 @router.get(
     '/hospital/{hospital_id}/doctors',
-    summary="Listar Médicos de um Hospital",
-    description="Retorna todos os médicos que atuam em um hospital",
+    summary="List Doctors by Hospital",
+    description="Returns all doctors working in a hospital",
     status_code=status.HTTP_200_OK
 )
 async def get_doctors_by_hospital(
