@@ -9,6 +9,7 @@ from src.controller.repasse.create_repasse import create_repasse_controller
 from src.controller.repasse.get_all_repasses import get_all_repasses_controller
 from src.controller.repasse.get_repasse_by_id import get_repasse_by_id_controller
 from src.controller.repasse.get_repasses_by_production import get_repasses_by_production_controller
+from src.controller.repasse.get_repasses_by_hospital import get_repasses_by_hospital_controller
 from src.controller.repasse.update_repasse import update_repasse_controller
 from src.controller.repasse.delete_repasse import delete_repasse_controller
 from src.controller.repasse.get_repasse_stats import get_repasse_stats
@@ -16,6 +17,7 @@ from src.domain.usecase.repasse.create_repasse import CreateRepasseUseCase
 from src.domain.usecase.repasse.get_all_repasses import GetAllRepassesUseCase
 from src.domain.usecase.repasse.get_repasse_by_id import GetRepasseByIdUseCase
 from src.domain.usecase.repasse.get_repasses_by_production import GetRepassesByProductionUseCase
+from src.domain.usecase.repasse.get_repasses_by_hospital import GetRepassesByHospitalUseCase
 from src.domain.usecase.repasse.update_repasse import UpdateRepasseUseCase
 from src.domain.usecase.repasse.delete_repasse import DeleteRepasseUseCase
 from src.dto.repasseDTO import CreateRepasseDTO, UpdateRepasseDTO, RepasseResponseDTO, RepasseStatsDTO
@@ -81,6 +83,20 @@ async def get_repasses_by_production(
     current_user=Depends(get_current_user)
 ):
     return get_repasses_by_production_controller(production_id, usecase)
+
+
+@router.get(
+    "/hospital/{hospital_id}",
+    summary="Listar Repasses por Hospital",
+    description="Retorna todos os repasses vinculados a um hospital específico",
+    response_model=List[RepasseResponseDTO]
+)
+async def get_repasses_by_hospital(
+    hospital_id: UUID,
+    usecase: GetRepassesByHospitalUseCase = Depends(usecase_factory('get_repasses_by_hospital_usecase')),
+    current_user=Depends(get_current_user)
+):
+    return get_repasses_by_hospital_controller(hospital_id, usecase)
 
 
 @router.put(

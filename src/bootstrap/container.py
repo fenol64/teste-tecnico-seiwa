@@ -18,12 +18,14 @@ from src.domain.usecase.production.create_production import CreateProductionUseC
 from src.domain.usecase.production.get_all_productions import GetAllProductionsUseCase
 from src.domain.usecase.production.get_production_by_id import GetProductionByIdUseCase
 from src.domain.usecase.production.get_productions_by_doctor import GetProductionsByDoctorUseCase
+from src.domain.usecase.production.get_productions_by_hospital import GetProductionsByHospitalUseCase
 from src.domain.usecase.production.update_production import UpdateProductionUseCase
 from src.domain.usecase.production.delete_production import DeleteProductionUseCase
 from src.domain.usecase.repasse.create_repasse import CreateRepasseUseCase
 from src.domain.usecase.repasse.get_all_repasses import GetAllRepassesUseCase
 from src.domain.usecase.repasse.get_repasse_by_id import GetRepasseByIdUseCase
 from src.domain.usecase.repasse.get_repasses_by_production import GetRepassesByProductionUseCase
+from src.domain.usecase.repasse.get_repasses_by_hospital import GetRepassesByHospitalUseCase
 from src.domain.usecase.repasse.update_repasse import UpdateRepasseUseCase
 from src.domain.usecase.repasse.delete_repasse import DeleteRepasseUseCase
 from src.domain.usecase.repasse.get_repasse_stats import GetRepasseStatsUseCase
@@ -153,6 +155,10 @@ class Container:
             get_productions_by_doctor_port=self.production_repository
         )
 
+        self.get_productions_by_hospital_usecase = GetProductionsByHospitalUseCase(
+            repository=self.production_repository
+        )
+
         self.update_production_usecase = UpdateProductionUseCase(
             update_production_port=self.production_repository,
             get_production_by_id_port=self.production_repository
@@ -178,6 +184,10 @@ class Container:
         )
 
         self.get_repasses_by_production_usecase = GetRepassesByProductionUseCase(
+            repasse_repository=self.repasse_repository
+        )
+
+        self.get_repasses_by_hospital_usecase = GetRepassesByHospitalUseCase(
             repasse_repository=self.repasse_repository
         )
 

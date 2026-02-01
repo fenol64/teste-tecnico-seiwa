@@ -9,12 +9,14 @@ from src.controller.production.create_production import CreateProductionHandler
 from src.controller.production.get_all_productions import GetAllProductionsHandler
 from src.controller.production.get_production_by_id import GetProductionByIdHandler
 from src.controller.production.get_productions_by_doctor import GetProductionsByDoctorHandler
+from src.controller.production.get_productions_by_hospital import GetProductionsByHospitalHandler
 from src.controller.production.update_production import UpdateProductionHandler
 from src.controller.production.delete_production import DeleteProductionHandler
 from src.domain.usecase.production.create_production import CreateProductionUseCase
 from src.domain.usecase.production.get_all_productions import GetAllProductionsUseCase
 from src.domain.usecase.production.get_production_by_id import GetProductionByIdUseCase
 from src.domain.usecase.production.get_productions_by_doctor import GetProductionsByDoctorUseCase
+from src.domain.usecase.production.get_productions_by_hospital import GetProductionsByHospitalUseCase
 from src.domain.usecase.production.update_production import UpdateProductionUseCase
 from src.domain.usecase.production.delete_production import DeleteProductionUseCase
 from src.dto.productionDTO import CreateProductionDTO, UpdateProductionDTO, ProductionResponseDTO
@@ -87,6 +89,22 @@ async def get_productions_by_doctor(
 ):
     handler = GetProductionsByDoctorHandler(get_productions_by_doctor_usecase=usecase)
     return handler.handle(doctor_id, skip=skip, limit=limit)
+
+
+@router.get(
+    '/hospital/{hospital_id}',
+    summary="Listar Produções por Hospital",
+    description="Lista todas as produções de um hospital específico",
+    response_model=List[ProductionResponseDTO],
+    status_code=status.HTTP_200_OK
+)
+async def get_productions_by_hospital(
+    hospital_id: uuid.UUID,
+    usecase: GetProductionsByHospitalUseCase = Depends(usecase_factory('get_productions_by_hospital_usecase')),
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    handler = GetProductionsByHospitalHandler(usecase=usecase)
+    return handler.handle(hospital_id)
 
 
 @router.put(

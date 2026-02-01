@@ -29,7 +29,12 @@ class IRepasseRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_hospital(self, hospital_id: UUID) -> List[Repasse]:
+        pass
+
+    @abstractmethod
     def update(self, repasse_id: UUID, data: UpdateRepasseDTO) -> Optional[Repasse]:
+
         pass
 
     @abstractmethod

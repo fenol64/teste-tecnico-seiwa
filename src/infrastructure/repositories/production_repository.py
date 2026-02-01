@@ -11,9 +11,10 @@ from src.domain.usecase.interfaces.IUpdateProduction import IUpdateProduction
 from src.domain.usecase.interfaces.IDeleteProduction import IDeleteProduction
 from src.domain.usecase.interfaces.IGetAllProductions import IGetAllProductions
 from src.domain.usecase.interfaces.IGetProductionsByDoctor import IGetProductionsByDoctor
+from src.domain.usecase.interfaces.IGetProductionsByHospital import IGetProductionsByHospital
 
 
-class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProduction, IDeleteProduction, IGetAllProductions, IGetProductionsByDoctor):
+class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProduction, IDeleteProduction, IGetAllProductions, IGetProductionsByDoctor, IGetProductionsByHospital):
     def __init__(self, db: Session):
         self.db = db
 
@@ -62,6 +63,26 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
         productions_model = self.db.query(ProductionModel).filter(
             ProductionModel.doctor_id == doctor_id
         ).offset(skip).limit(limit).all()
+
+        return [
+            Production(
+                id=production.id,
+                doctor_id=production.doctor_id,
+                hospital_id=production.hospital_id,
+                type=production.type.value,
+                date=production.date,
+                description=production.description,
+                created_at=production.created_at.isoformat(),
+                updated_at=production.updated_at.isoformat() if production.updated_at else None
+            )
+            for production in productions_model
+        ]
+
+    def get_by_hospital(self, hospital_id: uuid.UUID) -> List[Production]:
+        """Lista todas as produções de um hospital específico"""
+        productions_model = self.db.query(ProductionModel).filter(
+            ProductionModel.hospital_id == hospital_id
+        ).all()
 
         return [
             Production(

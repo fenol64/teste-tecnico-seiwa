@@ -112,6 +112,20 @@ class TestProductionRoutes:
         assert len(data) >= 1
         assert data[0]["doctor_id"] == str(created_doctor.id)
 
+    def test_get_productions_by_hospital(self, client: TestClient, auth_headers: dict,
+                                         created_hospital, created_production):
+        """Test getting productions by hospital"""
+        response = client.get(
+            f"/api/v1/productions/hospital/{created_hospital.id}",
+            headers=auth_headers
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        assert len(data) >= 1
+        assert data[0]["hospital_id"] == str(created_hospital.id)
+
     def test_update_production(self, client: TestClient, auth_headers: dict, created_production):
         """Test updating production"""
         update_data = {
@@ -228,6 +242,33 @@ class TestRepasseRoutes:
         data = response.json()
         assert isinstance(data, list)
         assert len(data) >= 1
+        assert data[0]["production_id"] == str(created_production.id)
+
+    def test_get_repasses_by_hospital(self, client: TestClient, auth_headers: dict,
+                                      created_production, created_hospital):
+        """Test getting repasses by hospital"""
+        # Create a repasse
+        client.post(
+            "/api/v1/repasses/",
+            json={
+                "production_id": str(created_production.id),
+                "valor": 1500.00
+            },
+            headers=auth_headers
+        )
+
+        response = client.get(
+            f"/api/v1/repasses/hospital/{created_hospital.id}",
+            headers=auth_headers
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        assert len(data) >= 1
+        # Check if the repasse belongs to the correct production which belongs to the hospital
+        # Since the response is just repasse DTOs, we might check IDs or trust the query.
+        # Ideally we could verify the structure or check if at least one item returned is the one we created.
         assert data[0]["production_id"] == str(created_production.id)
 
     def test_update_repasse(self, client: TestClient, auth_headers: dict, created_production):

@@ -34,6 +34,15 @@ class RepasseRepository(IRepasseRepository):
         repasse = self.db.query(RepasseModel).filter(RepasseModel.id == repasse_id).first()
         return self._to_entity(repasse) if repasse else None
 
+    def get_by_hospital(self, hospital_id: UUID) -> List[Repasse]:
+        repasses = (
+            self.db.query(RepasseModel)
+            .join(ProductionModel, RepasseModel.production_id == ProductionModel.id)
+            .filter(ProductionModel.hospital_id == hospital_id)
+            .all()
+        )
+        return [self._to_entity(repasse) for repasse in repasses]
+
     def update(self, repasse_id: UUID, data: UpdateRepasseDTO) -> Optional[Repasse]:
         repasse = self.db.query(RepasseModel).filter(RepasseModel.id == repasse_id).first()
         if not repasse:
