@@ -50,9 +50,10 @@ class TestDoctorRoutes:
         assert "Doctor with this CRM already exists." in response.json()["detail"]
 
     def test_get_all_doctors(self, client: TestClient, auth_headers: dict, created_doctor):
-        """Test listing all doctors"""
+        """Test listing all doctors with pagination verification"""
+        # Request page 1 with page_size 1
         response = client.get(
-            "/api/v1/doctors/",
+            "/api/v1/doctors/?page=1&page_size=1",
             headers=auth_headers
         )
 
@@ -61,9 +62,17 @@ class TestDoctorRoutes:
         assert isinstance(data, dict)
         assert "items" in data
         assert "total" in data
-        assert "page" in data
-        assert "page_size" in data
-        assert "total_pages" in data
+        assert len(data["items"]) == 1
+        assert data["page"] == 1
+        assert data["page_size"] == 1
+
+        # Request with default size
+        response = client.get(
+            "/api/v1/doctors/",
+            headers=auth_headers
+        )
+        assert response.status_code == 200
+        data = response.json()
         assert len(data["items"]) >= 1
 
     def test_get_doctor_by_id(self, client: TestClient, auth_headers: dict, created_doctor):
