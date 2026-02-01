@@ -48,7 +48,7 @@ class TestCreateProductionUseCase:
             id=uuid4(),
             doctor_id=str(doctor_id),
             hospital_id=str(hospital_id),
-            type="plantao",
+            type="shift",
             date=date(2024, 1, 15),
             description="Test",
             created_at="2024-01-01T00:00:00",
@@ -64,7 +64,7 @@ class TestCreateProductionUseCase:
         dto = CreateProductionDTO(
             doctor_id=str(doctor_id),
             hospital_id=str(hospital_id),
-            type="plantao",
+            type="shift",
             date=date(2024, 1, 15),
             description="Test"
         )
@@ -99,7 +99,7 @@ class TestCreateProductionUseCase:
         dto = CreateProductionDTO(
             doctor_id=str(doctor_id),
             hospital_id=str(hospital_id),
-            type="plantao",
+            type="shift",
             date=date(2024, 1, 15),
             description="Test"
         )
@@ -138,7 +138,7 @@ class TestCreateProductionUseCase:
         dto = CreateProductionDTO(
             doctor_id=str(doctor_id),
             hospital_id=str(hospital_id),
-            type="plantao",
+            type="shift",
             date=date(2024, 1, 15),
             description="Test"
         )
@@ -165,7 +165,7 @@ class TestCreateRepasseUseCase:
             id=production_id,
             doctor_id=uuid4(),
             hospital_id=uuid4(),
-            type="plantao",
+            type="shift",
             date=date(2024, 1, 15),
             description="Test",
             created_at="2024-01-01T00:00:00",
@@ -175,7 +175,7 @@ class TestCreateRepasseUseCase:
         mock_repasse_repo.create.return_value = Repasse(
             id=uuid4(),
             production_id=production_id,
-            valor=Decimal("1500.00"),
+            amount=Decimal("1500.00"),
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -187,7 +187,7 @@ class TestCreateRepasseUseCase:
 
         dto = CreateRepasseDTO(
             production_id=production_id,
-            valor=Decimal("1500.00")
+            amount=Decimal("1500.00")
         )
 
         # Act
@@ -196,7 +196,7 @@ class TestCreateRepasseUseCase:
         # Assert
         assert result is not None
         assert result.production_id == production_id
-        assert result.valor == Decimal("1500.00")
+        assert result.amount == Decimal("1500.00")
         mock_repasse_repo.create.assert_called_once()
 
     def test_create_repasse_production_not_found(self):
@@ -216,7 +216,7 @@ class TestCreateRepasseUseCase:
 
         dto = CreateRepasseDTO(
             production_id=production_id,
-            valor=Decimal("1500.00")
+            amount=Decimal("1500.00")
         )
 
         # Act & Assert

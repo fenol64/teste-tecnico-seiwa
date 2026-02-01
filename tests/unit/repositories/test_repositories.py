@@ -155,7 +155,7 @@ class TestProductionRepository:
             id=uuid4(),
             doctor_id=created_doctor.id,
             hospital_id=created_hospital.id,
-            type="plantao",
+            type="shift",
             date=date(2024, 1, 15),
             description="Test",
             created_at=datetime.now(timezone.utc).isoformat()
@@ -164,7 +164,7 @@ class TestProductionRepository:
         result = repo.save(production)
 
         assert result is not None
-        assert result.type == "plantao"
+        assert result.type == "shift"
 
     def test_get_productions_by_doctor(self, db_session, created_production):
         """Test getting productions by doctor"""
@@ -181,14 +181,14 @@ class TestRepasseRepository:
         repo = RepasseRepository(db_session)
         dto = CreateRepasseDTO(
             production_id=created_production.id,
-            valor=Decimal("1000.00")
+            amount=Decimal("1000.00")
         )
 
         result = repo.create(dto)
 
         assert result is not None
-        assert result.valor == Decimal("1000.00")
-        assert result.status == RepasseStatus.PENDENTE
+        assert result.amount == Decimal("1000.00")
+        assert result.status == RepasseStatus.PENDING
 
     def test_get_by_doctor_and_date_range(self, db_session, created_production):
         repo = RepasseRepository(db_session)
@@ -196,16 +196,16 @@ class TestRepasseRepository:
         # Create consolidated repasse
         dto1 = CreateRepasseDTO(
             production_id=created_production.id,
-            valor=Decimal("500.00"),
-            status=RepasseStatus.CONSOLIDADO
+            amount=Decimal("500.00"),
+            status=RepasseStatus.CONSOLIDATED
         )
         repo.create(dto1)
 
         # Create pending repasse
         dto2 = CreateRepasseDTO(
             production_id=created_production.id,
-            valor=Decimal("300.00"),
-            status=RepasseStatus.PENDENTE
+            amount=Decimal("300.00"),
+            status=RepasseStatus.PENDING
         )
         repo.create(dto2)
 
@@ -214,5 +214,5 @@ class TestRepasseRepository:
         # Test without dates
         results = repo.get_by_doctor_and_date_range(doctor_id, None, None)
         assert len(results) == 2
-        assert any(r.status == RepasseStatus.CONSOLIDADO for r in results)
-        assert any(r.status == RepasseStatus.PENDENTE for r in results)
+        assert any(r.status == RepasseStatus.CONSOLIDATED for r in results)
+        assert any(r.status == RepasseStatus.PENDING for r in results)
