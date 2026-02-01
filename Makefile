@@ -25,4 +25,10 @@ clean:
 status:
 	docker-compose -f ops/docker-compose.yml ps
 
+run-migrations:
+	alembic upgrade head
+
+migrations:
+	alembic revision --autogenerate -m "$(m)"
+
 .PHONY: up down logs test seed install clean

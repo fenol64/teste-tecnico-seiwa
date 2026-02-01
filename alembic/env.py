@@ -8,6 +8,9 @@ from alembic import context
 # Importar configuração do banco e modelos
 import sys
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Adicionar o diretório raiz ao path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
