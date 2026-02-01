@@ -6,7 +6,13 @@ Este repositório contém o código-fonte para o teste técnico da Seiwa, inclui
 
 projeto foi desenvolvido utilizando Python com FastAPI, PostgreSQL como banco de dados, e Docker para containerização. Além disso, foram integradas ferramentas de monitoramento como Prometheus e Grafana.
 
-url de produção: https://api-seiwa.fenol64.com.br/docs
+**Fique a vontade para testar a API via Swagger UI ou o frontend desenvolvido em React Native disponível neste repositório.**
+
+Swagger: https://api-seiwa.fenol64.com.br/docs
+App: https://test-tec-seiwa.fenol64.com.br/
+
+Repositório do Frontend:
+https://github.com/fenol64/teste-tecnico-seiwa-frontend
 
 ### Contexto
 
