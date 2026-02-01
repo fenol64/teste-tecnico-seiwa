@@ -16,7 +16,7 @@ class RepasseRepository(IRepasseRepository):
     def create(self, data: CreateRepasseDTO) -> Repasse:
         repasse = RepasseModel(
             production_id=data.production_id,
-            valor=data.amount,
+            amount=data.amount,
             status=data.status
         )
         self.db.add(repasse)
@@ -49,7 +49,7 @@ class RepasseRepository(IRepasseRepository):
             return None
 
         if data.amount is not None:
-            repasse.valor = data.amount
+            repasse.amount = data.amount
         if data.status is not None:
             repasse.status = data.status
 
@@ -91,7 +91,7 @@ class RepasseRepository(IRepasseRepository):
         return Repasse(
             id=model.id,
             production_id=model.production_id,
-            amount=model.valor,
+            amount=model.amount,
             created_at=model.created_at,
             updated_at=model.updated_at,
             status=model.status

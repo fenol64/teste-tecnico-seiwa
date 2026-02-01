@@ -11,7 +11,7 @@ class RepasseModel(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     production_id = Column(UUID(as_uuid=True), ForeignKey("productions.id", ondelete="CASCADE"), nullable=False, index=True)
-    valor = Column(Numeric(10, 2), nullable=False)
+    amount = Column(Numeric(10, 2), nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
     status = Column(SAEnum(RepasseStatus), default=RepasseStatus.PENDING, nullable=False)
