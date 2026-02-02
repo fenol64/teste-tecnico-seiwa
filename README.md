@@ -97,16 +97,15 @@ Fique a vontade para usar uma linguagem/framework de sua escolha, bem como para 
 ## Endpoints para o Teste Técnico
 
 - **Médicos**
-  - `POST /medicos/`: Cadastrar um novo médico.
-  - `GET /medicos/{medico_id}/`: Obter detalhes de um médico.
+  - `POST /api/v1/doctors/`: Cadastrar um novo médico.
+  - `GET /api/v1/doctors/{doctor_id}`: Obter detalhes de um médico.
 - **Produções**
-    - `POST /producoes/`: Registrar uma nova produção.
-    - `GET /producoes/{medico_id}/`: Listar produções de um médico.
+    - `POST /api/v1/productions/`: Registrar uma nova produção.
+    - `GET /api/v1/productions/doctor/{doctor_id}`: Listar produções de um médico.
 - **Repasses**
-    - `POST /repasses/`: Registrar um novo repasse.
-    - `GET /repasses/{medico_id}/`: Listar repasses de um médico.
+    - `POST /api/v1/repasses/`: Registrar um novo repasse.
 - **Saldo Consolidado**
-    - `GET /medicos/{medico_id}/saldo/?data_inicio=&data_fim=`: Consultar saldo consolidado de um médico em um período.
+    - `GET /api/v1/repasses/stats/{doctor_id}?start_date=&end_date=`: Consultar saldo consolidado e estatísticas de um médico.
 
 ## Testes
 Para rodar os testes automatizados, execute:
@@ -123,8 +122,6 @@ O projeto possui pipeline automatizado de CI/CD usando GitHub Actions:
 - 📊 **Cobertura de código** com relatórios automáticos
 
 **O deploy só acontece se todos os testes passarem!**
-
-Para mais detalhes, veja [.github/CI-CD.md](.github/CI-CD.md).
 
 ## Monitoramento
 
