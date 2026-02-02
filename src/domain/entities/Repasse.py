@@ -9,6 +9,7 @@ class Repasse:
     def __init__(
         self,
         id: UUID,
+        user_id: UUID,
         production_id: UUID,
         amount: Decimal,
         created_at: datetime,
@@ -16,6 +17,7 @@ class Repasse:
         status: RepasseStatus = RepasseStatus.PENDING
     ):
         self.id = id
+        self.user_id = user_id
         self.production_id = production_id
         self.amount = amount
         self.created_at = created_at

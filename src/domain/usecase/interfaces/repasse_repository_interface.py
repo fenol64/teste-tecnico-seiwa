@@ -8,11 +8,11 @@ from src.dto.repasseDTO import CreateRepasseDTO, UpdateRepasseDTO
 
 class IRepasseRepository(ABC):
     @abstractmethod
-    def create(self, data: CreateRepasseDTO) -> Repasse:
+    def create(self, data: CreateRepasseDTO, user_id: UUID) -> Repasse:
         pass
 
     @abstractmethod
-    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Repasse], int]:
+    def get_all(self, skip: int = 0, limit: int = 100, user_id: Optional[UUID] = None) -> Tuple[List[Repasse], int]:
         pass
 
     @abstractmethod

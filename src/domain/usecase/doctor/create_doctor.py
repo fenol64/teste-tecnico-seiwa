@@ -18,7 +18,7 @@ class CreateDoctorUseCase:
         self.get_doctor_by_crm_port = get_doctor_by_crm_port
         self.get_doctor_by_email_port = get_doctor_by_email_port
 
-    def execute(self, doctor_data: CreateDoctorDTO) -> Doctor:
+    def execute(self, doctor_data: CreateDoctorDTO, user_id: uuid.UUID) -> Doctor:
         # Verifica se já existe médico com este CRM
         existing_crm = self.get_doctor_by_crm_port.get_by_crm(doctor_data.crm)
         if existing_crm:
@@ -31,6 +31,7 @@ class CreateDoctorUseCase:
 
         doctor_entity = Doctor(
             id=uuid.uuid4(),
+            user_id=user_id,
             name=doctor_data.name,
             crm=doctor_data.crm,
             specialty=doctor_data.specialty,

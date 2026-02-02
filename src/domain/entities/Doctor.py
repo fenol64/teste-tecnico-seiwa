@@ -9,6 +9,7 @@ class Doctor(BaseModel):
     specialty: str
     phone: str | None = None
     email: str
+    user_id: uuid.UUID
     created_at: str
     updated_at: str | None = None
 

@@ -39,7 +39,8 @@ async def create_doctor(
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     handler = CreateDoctorHandler(create_doctor_usecase=usecase)
-    return handler.handle(doctor)
+    user_id = current_user.get("sub")
+    return handler.handle(doctor, user_id)
 
 
 @router.get(
@@ -55,9 +56,11 @@ async def get_all_doctors(
     usecase: GetAllDoctorsUseCase = Depends(usecase_factory('get_all_doctors_usecase')),
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
-    skip = (page - 1) * page_size
+    limit = page_size
+    skip = (page - 1) * limit
     handler = GetAllDoctorsHandler(get_all_doctors_usecase=usecase)
-    return handler.handle(skip=skip, limit=page_size)
+    user_id = current_user.get("sub")
+    return handler.handle(user_id=user_id, skip=skip, limit=limit)
 
 
 @router.get(

@@ -24,21 +24,27 @@ class HospitalRepository(IGetHospitalById, ISaveHospital, IUpdateHospital, IDele
 
         return Hospital(
             id=hospital_model.id,
+            user_id=hospital_model.user_id,
             name=hospital_model.name,
             address=hospital_model.address,
             created_at=hospital_model.created_at.isoformat(),
             updated_at=hospital_model.updated_at.isoformat() if hospital_model.updated_at else None
         )
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Hospital], int]:
+    def get_all(self, skip: int = 0, limit: int = 100, user_id: Optional[uuid.UUID] = None) -> Tuple[List[Hospital], int]:
         """Lista todos os hospitais com paginação"""
         query = self.db.query(HospitalModel)
+
+        if user_id:
+            query = query.filter(HospitalModel.user_id == user_id)
+
         total = query.count()
         hospitals_model = query.offset(skip).limit(limit).all()
 
         hospitals = [
             Hospital(
                 id=hospital.id,
+                user_id=hospital.user_id,
                 name=hospital.name,
                 address=hospital.address,
                 created_at=hospital.created_at.isoformat(),
@@ -53,6 +59,7 @@ class HospitalRepository(IGetHospitalById, ISaveHospital, IUpdateHospital, IDele
         """Salva um novo hospital no banco de dados"""
         hospital_model = HospitalModel(
             id=hospital.id,
+            user_id=hospital.user_id,
             name=hospital.name,
             address=hospital.address
         )
@@ -63,6 +70,7 @@ class HospitalRepository(IGetHospitalById, ISaveHospital, IUpdateHospital, IDele
 
         return Hospital(
             id=hospital_model.id,
+            user_id=hospital_model.user_id,
             name=hospital_model.name,
             address=hospital_model.address,
             created_at=hospital_model.created_at.isoformat(),
@@ -85,6 +93,7 @@ class HospitalRepository(IGetHospitalById, ISaveHospital, IUpdateHospital, IDele
 
         return Hospital(
             id=hospital_model.id,
+            user_id=hospital_model.user_id,
             name=hospital_model.name,
             address=hospital_model.address,
             created_at=hospital_model.created_at.isoformat(),

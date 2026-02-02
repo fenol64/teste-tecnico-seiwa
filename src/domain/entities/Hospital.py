@@ -6,6 +6,7 @@ class Hospital(BaseModel):
     id: uuid.UUID
     name: str
     address: str
+    user_id: uuid.UUID
     created_at: str
     updated_at: str | None = None
 

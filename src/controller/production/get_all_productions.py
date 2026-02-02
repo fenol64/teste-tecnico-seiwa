@@ -4,13 +4,15 @@ from src.dto.pagination import PaginatedResponse
 from src.dto.productionDTO import ProductionResponseDTO
 
 
+import uuid
+
 class GetAllProductionsHandler:
     def __init__(self, get_all_productions_usecase: GetAllProductionsUseCase):
         self.get_all_productions_usecase = get_all_productions_usecase
 
-    def handle(self, skip: int = 0, limit: int = 100) -> PaginatedResponse[ProductionResponseDTO]:
+    def handle(self, user_id: str, skip: int = 0, limit: int = 100) -> PaginatedResponse[ProductionResponseDTO]:
         try:
-            productions, total = self.get_all_productions_usecase.execute(skip=skip, limit=limit)
+            productions, total = self.get_all_productions_usecase.execute(skip=skip, limit=limit, user_id=uuid.UUID(user_id))
             items = [
                 ProductionResponseDTO(
                     id=str(production.id),

@@ -9,9 +9,10 @@ class CreateHospitalUseCase:
     def __init__(self, save_hospital_port: ISaveHospital):
         self.save_hospital_port = save_hospital_port
 
-    def execute(self, hospital_data: CreateHospitalDTO) -> Hospital:
+    def execute(self, hospital_data: CreateHospitalDTO, user_id: uuid.UUID) -> Hospital:
         hospital_entity = Hospital(
             id=uuid.uuid4(),
+            user_id=user_id,
             name=hospital_data.name,
             address=hospital_data.address,
             created_at=datetime.now().isoformat(),

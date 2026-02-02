@@ -5,6 +5,7 @@ from datetime import date
 
 class Production(BaseModel):
     id: uuid.UUID
+    user_id: uuid.UUID
     doctor_id: uuid.UUID
     hospital_id: uuid.UUID
     type: str  # "plantao" ou "consulta"

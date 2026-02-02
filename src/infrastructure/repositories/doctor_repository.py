@@ -26,6 +26,7 @@ class DoctorRepository(IGetDoctorById, IGetDoctorByCRM, IGetDoctorByEmail, ISave
 
         return Doctor(
             id=doctor_model.id,
+            user_id=doctor_model.user_id,
             name=doctor_model.name,
             crm=doctor_model.crm,
             specialty=doctor_model.specialty,
@@ -44,6 +45,7 @@ class DoctorRepository(IGetDoctorById, IGetDoctorByCRM, IGetDoctorByEmail, ISave
 
         return Doctor(
             id=doctor_model.id,
+            user_id=doctor_model.user_id,
             name=doctor_model.name,
             crm=doctor_model.crm,
             specialty=doctor_model.specialty,
@@ -62,6 +64,7 @@ class DoctorRepository(IGetDoctorById, IGetDoctorByCRM, IGetDoctorByEmail, ISave
 
         return Doctor(
             id=doctor_model.id,
+            user_id=doctor_model.user_id,
             name=doctor_model.name,
             crm=doctor_model.crm,
             specialty=doctor_model.specialty,
@@ -71,15 +74,20 @@ class DoctorRepository(IGetDoctorById, IGetDoctorByCRM, IGetDoctorByEmail, ISave
             updated_at=doctor_model.updated_at.isoformat() if doctor_model.updated_at else None
         )
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Doctor], int]:
+    def get_all(self, skip: int = 0, limit: int = 100, user_id: Optional[uuid.UUID] = None) -> Tuple[List[Doctor], int]:
         """Lista todos os médicos com paginação"""
         query = self.db.query(DoctorModel)
+
+        if user_id:
+            query = query.filter(DoctorModel.user_id == user_id)
+
         total = query.count()
         doctors_model = query.offset(skip).limit(limit).all()
 
         doctors = [
             Doctor(
                 id=doctor.id,
+                user_id=doctor.user_id,
                 name=doctor.name,
                 crm=doctor.crm,
                 specialty=doctor.specialty,
@@ -97,6 +105,7 @@ class DoctorRepository(IGetDoctorById, IGetDoctorByCRM, IGetDoctorByEmail, ISave
         """Salva um novo médico no banco de dados"""
         doctor_model = DoctorModel(
             id=doctor.id,
+            user_id=doctor.user_id,
             name=doctor.name,
             crm=doctor.crm,
             specialty=doctor.specialty,
@@ -110,6 +119,7 @@ class DoctorRepository(IGetDoctorById, IGetDoctorByCRM, IGetDoctorByEmail, ISave
 
         return Doctor(
             id=doctor_model.id,
+            user_id=doctor_model.user_id,
             name=doctor_model.name,
             crm=doctor_model.crm,
             specialty=doctor_model.specialty,
@@ -135,6 +145,7 @@ class DoctorRepository(IGetDoctorById, IGetDoctorByCRM, IGetDoctorByEmail, ISave
 
         return Doctor(
             id=doctor_model.id,
+            user_id=doctor_model.user_id,
             name=doctor_model.name,
             crm=doctor_model.crm,
             specialty=doctor_model.specialty,

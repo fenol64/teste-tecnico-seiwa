@@ -34,7 +34,8 @@ async def create_hospital(
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     handler = CreateHospitalHandler(create_hospital_usecase=usecase)
-    return handler.handle(hospital)
+    user_id = current_user.get("sub")
+    return handler.handle(hospital, user_id)
 
 
 @router.get(
@@ -52,7 +53,8 @@ async def get_all_hospitals(
 ):
     skip = (page - 1) * page_size
     handler = GetAllHospitalsHandler(get_all_hospitals_usecase=usecase)
-    return handler.handle(skip=skip, limit=page_size)
+    user_id = current_user.get("sub")
+    return handler.handle(user_id=user_id, skip=skip, limit=page_size)
 
 
 @router.get(

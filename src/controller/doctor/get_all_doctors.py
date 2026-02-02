@@ -4,16 +4,19 @@ from src.dto.pagination import PaginatedResponse
 from src.dto.doctorDTO import DoctorResponseDTO
 
 
+import uuid
+
 class GetAllDoctorsHandler:
     def __init__(self, get_all_doctors_usecase: GetAllDoctorsUseCase):
         self.get_all_doctors_usecase = get_all_doctors_usecase
 
-    def handle(self, skip: int = 0, limit: int = 100) -> PaginatedResponse[DoctorResponseDTO]:
+    def handle(self, user_id: str, skip: int = 0, limit: int = 100) -> PaginatedResponse[DoctorResponseDTO]:
         try:
-            doctors, total = self.get_all_doctors_usecase.execute(skip=skip, limit=limit)
+            doctors, total = self.get_all_doctors_usecase.execute(skip=skip, limit=limit, user_id=uuid.UUID(user_id))
             items = [
                 DoctorResponseDTO(
                     id=str(doctor.id),
+                    user_id=str(doctor.user_id),
                     name=doctor.name,
                     crm=doctor.crm,
                     specialty=doctor.specialty,

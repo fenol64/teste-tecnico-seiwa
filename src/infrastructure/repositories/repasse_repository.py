@@ -13,8 +13,9 @@ class RepasseRepository(IRepasseRepository):
     def __init__(self, db: Session):
         self.db = db
 
-    def create(self, data: CreateRepasseDTO) -> Repasse:
+    def create(self, data: CreateRepasseDTO, user_id: UUID) -> Repasse:
         repasse = RepasseModel(
+            user_id=user_id,
             production_id=data.production_id,
             amount=data.amount,
             status=data.status
@@ -24,8 +25,12 @@ class RepasseRepository(IRepasseRepository):
         self.db.refresh(repasse)
         return self._to_entity(repasse)
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Repasse], int]:
+    def get_all(self, skip: int = 0, limit: int = 100, user_id: Optional[UUID] = None) -> Tuple[List[Repasse], int]:
         query = self.db.query(RepasseModel)
+
+        if user_id:
+            query = query.filter(RepasseModel.user_id == user_id)
+
         total = query.count()
         repasses = query.offset(skip).limit(limit).all()
         return [self._to_entity(repasse) for repasse in repasses], total
@@ -90,6 +95,7 @@ class RepasseRepository(IRepasseRepository):
     def _to_entity(self, model: RepasseModel) -> Repasse:
         return Repasse(
             id=model.id,
+            user_id=model.user_id,
             production_id=model.production_id,
             amount=model.amount,
             created_at=model.created_at,

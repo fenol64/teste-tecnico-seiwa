@@ -3,13 +3,15 @@ from src.dto.productionDTO import CreateProductionDTO
 from src.domain.usecase.production.create_production import CreateProductionUseCase
 
 
+import uuid
+
 class CreateProductionHandler:
     def __init__(self, create_production_usecase: CreateProductionUseCase):
         self.create_production_usecase = create_production_usecase
 
-    def handle(self, production_data: CreateProductionDTO):
+    def handle(self, production_data: CreateProductionDTO, user_id: str):
         try:
-            production = self.create_production_usecase.execute(production_data)
+            production = self.create_production_usecase.execute(production_data, uuid.UUID(user_id))
             return {
                 "id": str(production.id),
                 "doctor_id": str(production.doctor_id),

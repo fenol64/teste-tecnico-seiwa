@@ -18,7 +18,7 @@ class CreateProductionUseCase:
         self.get_doctor_by_id_port = get_doctor_by_id_port
         self.get_hospital_by_id_port = get_hospital_by_id_port
 
-    def execute(self, production_data: CreateProductionDTO) -> Production:
+    def execute(self, production_data: CreateProductionDTO, user_id: uuid.UUID) -> Production:
         # Verifica se o médico existe
         doctor = self.get_doctor_by_id_port.get_by_id(uuid.UUID(production_data.doctor_id))
         if not doctor:
@@ -31,6 +31,7 @@ class CreateProductionUseCase:
 
         production_entity = Production(
             id=uuid.uuid4(),
+            user_id=user_id,
             doctor_id=uuid.UUID(production_data.doctor_id),
             hospital_id=uuid.UUID(production_data.hospital_id),
             type=production_data.type.value,

@@ -27,6 +27,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
 
         return Production(
             id=production_model.id,
+            user_id=production_model.user_id,
             doctor_id=production_model.doctor_id,
             hospital_id=production_model.hospital_id,
             type=production_model.type.value,
@@ -36,15 +37,20 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
             updated_at=production_model.updated_at.isoformat() if production_model.updated_at else None
         )
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> Tuple[List[Production], int]:
+    def get_all(self, skip: int = 0, limit: int = 100, user_id: Optional[uuid.UUID] = None) -> Tuple[List[Production], int]:
         """Lista todas as produções com paginação"""
         query = self.db.query(ProductionModel)
+
+        if user_id:
+            query = query.filter(ProductionModel.user_id == user_id)
+
         total = query.count()
         productions_model = query.offset(skip).limit(limit).all()
 
         productions = [
             Production(
                 id=production.id,
+                user_id=production.user_id,
                 doctor_id=production.doctor_id,
                 hospital_id=production.hospital_id,
                 type=production.type.value,
@@ -67,6 +73,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
         return [
             Production(
                 id=production.id,
+                user_id=production.user_id,
                 doctor_id=production.doctor_id,
                 hospital_id=production.hospital_id,
                 type=production.type.value,
@@ -87,6 +94,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
         return [
             Production(
                 id=production.id,
+                user_id=production.user_id,
                 doctor_id=production.doctor_id,
                 hospital_id=production.hospital_id,
                 type=production.type.value,
@@ -102,6 +110,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
         """Salva uma nova produção no banco de dados"""
         production_model = ProductionModel(
             id=production.id,
+            user_id=production.user_id,
             doctor_id=production.doctor_id,
             hospital_id=production.hospital_id,
             type=production.type,
@@ -115,6 +124,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
 
         return Production(
             id=production_model.id,
+            user_id=production_model.user_id,
             doctor_id=production_model.doctor_id,
             hospital_id=production_model.hospital_id,
             type=production_model.type.value,
@@ -140,6 +150,7 @@ class ProductionRepository(IGetProductionById, ISaveProduction, IUpdateProductio
 
         return Production(
             id=production_model.id,
+            user_id=production_model.user_id,
             hospital_id=production_model.hospital_id,
             doctor_id=production_model.doctor_id,
             type=production_model.type.value,

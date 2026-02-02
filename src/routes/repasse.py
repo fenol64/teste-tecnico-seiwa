@@ -38,7 +38,8 @@ async def create_repasse(
     usecase: CreateRepasseUseCase = Depends(usecase_factory('create_repasse_usecase')),
     current_user=Depends(get_current_user)
 ):
-    return create_repasse_controller(data, usecase)
+    user_id = UUID(current_user.get("sub"))
+    return create_repasse_controller(data, user_id, usecase)
 
 
 @router.get(
@@ -54,7 +55,8 @@ async def get_all_repasses(
     current_user=Depends(get_current_user)
 ):
     skip = (page - 1) * page_size
-    return get_all_repasses_controller(usecase, skip=skip, limit=page_size)
+    user_id = UUID(current_user.get("sub"))
+    return get_all_repasses_controller(usecase, user_id=user_id, skip=skip, limit=page_size)
 
 
 @router.get(

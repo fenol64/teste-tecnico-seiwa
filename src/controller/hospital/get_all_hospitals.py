@@ -4,13 +4,15 @@ from src.dto.pagination import PaginatedResponse
 from src.dto.hospitalDTO import HospitalResponseDTO
 
 
+import uuid
+
 class GetAllHospitalsHandler:
     def __init__(self, get_all_hospitals_usecase: GetAllHospitalsUseCase):
         self.get_all_hospitals_usecase = get_all_hospitals_usecase
 
-    def handle(self, skip: int = 0, limit: int = 100) -> PaginatedResponse[HospitalResponseDTO]:
+    def handle(self, user_id: str, skip: int = 0, limit: int = 100) -> PaginatedResponse[HospitalResponseDTO]:
         try:
-            hospitals, total = self.get_all_hospitals_usecase.execute(skip=skip, limit=limit)
+            hospitals, total = self.get_all_hospitals_usecase.execute(skip=skip, limit=limit, user_id=uuid.UUID(user_id))
             items = [
                 HospitalResponseDTO(
                     id=str(hospital.id),

@@ -36,7 +36,8 @@ async def create_production(
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     handler = CreateProductionHandler(create_production_usecase=usecase)
-    return handler.handle(production)
+    user_id = current_user.get("sub")
+    return handler.handle(production, user_id)
 
 
 @router.get(
@@ -54,7 +55,8 @@ async def get_all_productions(
 ):
     skip = (page - 1) * page_size
     handler = GetAllProductionsHandler(get_all_productions_usecase=usecase)
-    return handler.handle(skip=skip, limit=page_size)
+    user_id = current_user.get("sub")
+    return handler.handle(user_id=user_id, skip=skip, limit=page_size)
 
 
 @router.get(
