@@ -22,47 +22,52 @@ fake = Faker('pt_BR')
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def init_db():
-    print("Recreating database tables...")
-    Base.metadata.drop_all(bind=engine)
+    print("Ensuring database tables exist...")
+    # Base.metadata.drop_all(bind=engine) # Don't drop for this script, we might want to append
     Base.metadata.create_all(bind=engine)
 
-def seed():
+def create_demo_data():
     db = SessionLocal()
     try:
-        print("Creating seed data...")
+        print("Starting demo data creation process...")
 
+        # 1. Check or Create Demo User
+        email = "admin@seiwa.com"
+        demo_user = db.query(UserModel).filter(UserModel.email == email).first()
 
-        # 1. Create Users
-        users = []
-        for _ in range(10):
-            user = UserModel(
-                name=fake.name(),
-                email=fake.unique.email(),
-                password=pwd_context.hash("123456"), # Default password
+        if not demo_user:
+            print("Creating demo user...")
+            demo_user = UserModel(
+                name="Admin Usuario",
+                email=email,
+                password=pwd_context.hash("123456"),
                 created_at=datetime.now(timezone.utc)
             )
-            users.append(user)
-        db.add_all(users)
-        db.commit() # Commit to get IDs
-        print(f"Created {len(users)} users.")
+            db.add(demo_user)
+            db.commit()
+            db.refresh(demo_user)
+            print(f"User created: {demo_user.email} (pass: 123456)")
+        else:
+             print(f"User {email} already exists. Using existing user.")
 
-        # 2. Create Hospitals
+        # 2. Create 5 Hospitals
         hospitals = []
-        for _ in range(10):
+        for _ in range(5):
             hospital = HospitalModel(
-                name=fake.company() + " Hospital",
+                name=f"{fake.company()} Hospital",
                 address=fake.address(),
                 created_at=datetime.now(timezone.utc),
-                user_id=random.choice(users).id
+                user_id=demo_user.id
             )
             hospitals.append(hospital)
         db.add_all(hospitals)
         db.commit()
+        for h in hospitals: db.refresh(h)
         print(f"Created {len(hospitals)} hospitals.")
 
-        # 3. Create Doctors
+        # 3. Create 5 Doctors
         doctors = []
-        for _ in range(10):
+        for _ in range(5):
             doctor = DoctorModel(
                 name=fake.name(),
                 crm=f"{random.randint(1000, 99999)}/{fake.state_abbr()}",
@@ -70,20 +75,20 @@ def seed():
                 phone=fake.phone_number(),
                 email=fake.unique.email(),
                 created_at=datetime.now(timezone.utc),
-                user_id=random.choice(users).id
+                user_id=demo_user.id
             )
             doctors.append(doctor)
         db.add_all(doctors)
         db.commit()
+        for d in doctors: db.refresh(d)
         print(f"Created {len(doctors)} doctors.")
 
         # 4. Associate Doctors with Hospitals
         doctor_hospital_relations = []
         for doctor in doctors:
-            # Assign each doctor to 1-3 random hospitals
-            assigned_hospitals = random.sample(hospitals, k=random.randint(1, 3))
+            # Assign to 2 random hospitals
+            assigned_hospitals = random.sample(hospitals, k=2)
             for hospital in assigned_hospitals:
-                # Check if relation already exists (unlikely given the logic but good practice)
                 relation = DoctorHospitalModel(
                     doctor_id=doctor.id,
                     hospital_id=hospital.id,
@@ -94,11 +99,11 @@ def seed():
         db.commit()
         print(f"Associated doctors with hospitals.")
 
-        # 5. Create Productions
+        # 5. Create 5 Productions
         productions = []
-        for _ in range(10):
-            doc = random.choice(doctors)
-            hosp = random.choice(hospitals)
+        for i in range(5):
+            doc = doctors[i]
+            hosp = hospitals[i]
 
             prod_type = random.choice(list(ProductionType))
 
@@ -106,30 +111,27 @@ def seed():
                 doctor_id=doc.id,
                 hospital_id=hosp.id,
                 type=prod_type,
-                date=fake.date_between(start_date='-1y', end_date='today'),
-                description=fake.sentence(),
+                date=fake.date_between(start_date='-3m', end_date='today'),
+                description=f"Produção Ref. {fake.month_name()}",
                 created_at=datetime.now(timezone.utc),
-                user_id=random.choice(users).id
+                user_id=demo_user.id
             )
             productions.append(production)
 
         db.add_all(productions)
         db.commit()
+        for p in productions: db.refresh(p)
         print(f"Created {len(productions)} productions.")
 
-        # 6. Create Repasses
+        # 6. Create 5 Repasses
         repasses = []
         for prod in productions:
-            # Randomly decide if a repasse exists or multiple? Assuming 1 for now based on model usually being 1-to-many or 1-to-1.
-            # Production - Repasse seems to be 1 production -> 1 or many repasses?
-            # Model Repasse has production_id.
-
             repasse = RepasseModel(
                 production_id=prod.id,
-                amount=Decimal(random.uniform(100.0, 5000.0)),
+                amount=Decimal(random.uniform(1000.0, 5000.0)),
                 status=random.choice(list(RepasseStatus)),
                 created_at=datetime.now(timezone.utc),
-                user_id=random.choice(users).id
+                user_id=demo_user.id
             )
             repasses.append(repasse)
 
@@ -137,11 +139,16 @@ def seed():
         db.commit()
         print(f"Created {len(repasses)} repasses.")
 
-        print("Seeding completed successfully!")
+        print("\n=== DEMO DATA CREATED SUCCESSFULLY ===")
+        print(f"Login: {demo_user.email}")
+        print(f"Password: 123456")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
         db.rollback()
     finally:
         db.close()
 
 if __name__ == "__main__":
     init_db()
-    seed()
+    create_demo_data()

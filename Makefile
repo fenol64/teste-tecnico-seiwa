@@ -31,4 +31,7 @@ run-migrations:
 migrations:
 	alembic revision --autogenerate -m "$(m)"
 
-.PHONY: up down logs test seed install clean
+create-superuser:
+	python3 scripts/create_superuser.py
+
+.PHONY: up down logs test seed install clean create-superuser
