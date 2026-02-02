@@ -17,12 +17,14 @@ class TestCreateDoctorUseCase:
     def test_create_doctor_success(self, sample_doctor_data):
         """Test successful doctor creation"""
         # Arrange
+        user_id = uuid4()
         mock_repo = Mock()
         mock_repo.get_by_crm.return_value = None
         mock_repo.get_by_email.return_value = None
         mock_repo.save.return_value = Doctor(
             id=uuid4(),
             **sample_doctor_data,
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -36,7 +38,7 @@ class TestCreateDoctorUseCase:
         dto = CreateDoctorDTO(**sample_doctor_data)
 
         # Act
-        result = usecase.execute(dto)
+        result = usecase.execute(dto, user_id)
 
         # Assert
         assert result is not None
@@ -47,10 +49,12 @@ class TestCreateDoctorUseCase:
     def test_create_doctor_duplicate_crm(self, sample_doctor_data):
         """Test doctor creation with duplicate CRM"""
         # Arrange
+        user_id = uuid4()
         mock_repo = Mock()
         mock_repo.get_by_crm.return_value = Doctor(
             id=uuid4(),
             **sample_doctor_data,
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -65,18 +69,20 @@ class TestCreateDoctorUseCase:
 
         # Act & Assert
         with pytest.raises(ValueError) as exc_info:
-            usecase.execute(dto)
+            usecase.execute(dto, user_id)
 
         assert "Doctor with this CRM already exists." in str(exc_info.value)
 
     def test_create_doctor_duplicate_email(self, sample_doctor_data):
         """Test doctor creation with duplicate email"""
         # Arrange
+        user_id = uuid4()
         mock_repo = Mock()
         mock_repo.get_by_crm.return_value = None
         mock_repo.get_by_email.return_value = Doctor(
             id=uuid4(),
             **sample_doctor_data,
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -91,7 +97,7 @@ class TestCreateDoctorUseCase:
 
         # Act & Assert
         with pytest.raises(ValueError) as exc_info:
-            usecase.execute(dto)
+            usecase.execute(dto, user_id)
 
         assert "Doctor with this email already exists." in str(exc_info.value)
 
@@ -103,10 +109,12 @@ class TestGetDoctorByIdUseCase:
         """Test successful doctor retrieval"""
         # Arrange
         doctor_id = uuid4()
+        user_id = uuid4()
         mock_repo = Mock()
         mock_repo.get_by_id.return_value = Doctor(
             id=doctor_id,
             **sample_doctor_data,
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -144,10 +152,12 @@ class TestUpdateDoctorUseCase:
         """Test successful doctor update"""
         # Arrange
         doctor_id = uuid4()
+        user_id = uuid4()
         mock_repo = Mock()
         mock_repo.get_by_id.return_value = Doctor(
             id=doctor_id,
             **sample_doctor_data,
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -158,6 +168,7 @@ class TestUpdateDoctorUseCase:
         mock_repo.update.return_value = Doctor(
             id=doctor_id,
             **updated_data,
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -204,10 +215,12 @@ class TestDeleteDoctorUseCase:
         """Test successful doctor deletion"""
         # Arrange
         doctor_id = uuid4()
+        user_id = uuid4()
         mock_repo = Mock()
         mock_repo.get_by_id.return_value = Doctor(
             id=doctor_id,
             **sample_doctor_data,
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )

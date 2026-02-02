@@ -22,7 +22,7 @@ from src.domain.enums.repasse_status import RepasseStatus
 class TestDoctorRepository:
     """Test cases for DoctorRepository"""
 
-    def test_create_doctor(self, db_session, sample_doctor_data):
+    def test_create_doctor(self, db_session, sample_doctor_data, created_user):
         """Test creating a doctor"""
         repo = DoctorRepository(db_session)
         # Repo expects Entity, not DTO
@@ -33,6 +33,7 @@ class TestDoctorRepository:
             specialty=sample_doctor_data["specialty"],
             phone=sample_doctor_data["phone"],
             email=sample_doctor_data["email"],
+            user_id=created_user.id,
             created_at=datetime.now(timezone.utc).isoformat()
         )
 
@@ -105,7 +106,7 @@ class TestDoctorRepository:
 class TestHospitalRepository:
     """Test cases for HospitalRepository"""
 
-    def test_create_hospital(self, db_session):
+    def test_create_hospital(self, db_session, created_user):
         """Test creating a hospital"""
         repo = HospitalRepository(db_session)
         hospital_data = {
@@ -117,6 +118,7 @@ class TestHospitalRepository:
             id=uuid4(),
             name=hospital_data["name"],
             address=hospital_data["address"],
+            user_id=created_user.id,
             created_at=datetime.now(timezone.utc).isoformat()
         )
 
@@ -146,7 +148,7 @@ class TestHospitalRepository:
 class TestProductionRepository:
     """Test cases for ProductionRepository"""
 
-    def test_create_production(self, db_session, created_doctor, created_hospital):
+    def test_create_production(self, db_session, created_doctor, created_hospital, created_user):
         """Test creating production"""
         repo = ProductionRepository(db_session)
 
@@ -155,6 +157,7 @@ class TestProductionRepository:
             id=uuid4(),
             doctor_id=created_doctor.id,
             hospital_id=created_hospital.id,
+            user_id=created_user.id,
             type="shift",
             date=date(2024, 1, 15),
             description="Test",
@@ -176,7 +179,7 @@ class TestProductionRepository:
 class TestRepasseRepository:
     """Test cases for RepasseRepository"""
 
-    def test_create_repasse(self, db_session, created_production):
+    def test_create_repasse(self, db_session, created_production, created_user):
         """Test creating repasse"""
         repo = RepasseRepository(db_session)
         dto = CreateRepasseDTO(
@@ -184,13 +187,13 @@ class TestRepasseRepository:
             amount=Decimal("1000.00")
         )
 
-        result = repo.create(dto)
+        result = repo.create(dto, created_user.id)
 
         assert result is not None
         assert result.amount == Decimal("1000.00")
         assert result.status == RepasseStatus.PENDING
 
-    def test_get_by_doctor_and_date_range(self, db_session, created_production):
+    def test_get_by_doctor_and_date_range(self, db_session, created_production, created_user):
         repo = RepasseRepository(db_session)
 
         # Create consolidated repasse
@@ -199,7 +202,7 @@ class TestRepasseRepository:
             amount=Decimal("500.00"),
             status=RepasseStatus.CONSOLIDATED
         )
-        repo.create(dto1)
+        repo.create(dto1, created_user.id)
 
         # Create pending repasse
         dto2 = CreateRepasseDTO(
@@ -207,7 +210,7 @@ class TestRepasseRepository:
             amount=Decimal("300.00"),
             status=RepasseStatus.PENDING
         )
-        repo.create(dto2)
+        repo.create(dto2, created_user.id)
 
         doctor_id = created_production.doctor_id
 

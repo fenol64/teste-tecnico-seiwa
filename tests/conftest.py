@@ -156,14 +156,15 @@ def auth_headers(auth_token: str) -> dict:
 
 
 @pytest.fixture
-def created_doctor(db_session: Session):
+def created_doctor(db_session: Session, created_user: UserModel):
     """Create a doctor in the database"""
     doctor = DoctorModel(
         name="Dr. Test",
         crm="123456",
         specialty="Cardiologia",
         phone="11999999999",
-        email="doctor@test.com"
+        email="doctor@test.com",
+        user_id=created_user.id
     )
     db_session.add(doctor)
     db_session.commit()
@@ -172,11 +173,12 @@ def created_doctor(db_session: Session):
 
 
 @pytest.fixture
-def created_hospital(db_session: Session):
+def created_hospital(db_session: Session, created_user: UserModel):
     """Create a hospital in the database"""
     hospital = HospitalModel(
         name="Hospital Test",
-        address="Rua Test, 123"
+        address="Rua Test, 123",
+        user_id=created_user.id
     )
     db_session.add(hospital)
     db_session.commit()
@@ -185,7 +187,7 @@ def created_hospital(db_session: Session):
 
 
 @pytest.fixture
-def created_production(db_session: Session, created_doctor: DoctorModel, created_hospital: HospitalModel):
+def created_production(db_session: Session, created_doctor: DoctorModel, created_hospital: HospitalModel, created_user: UserModel):
     """Create a production in the database"""
     from datetime import date
     from src.infrastructure.database.models.production_model import ProductionType
@@ -193,6 +195,7 @@ def created_production(db_session: Session, created_doctor: DoctorModel, created
     production = ProductionModel(
         doctor_id=created_doctor.id,
         hospital_id=created_hospital.id,
+        user_id=created_user.id,
         type=ProductionType.SHIFT,
         date=date(2024, 1, 15),
         description="Test production"

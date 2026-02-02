@@ -24,6 +24,7 @@ class TestCreateProductionUseCase:
         # Arrange
         doctor_id = uuid4()
         hospital_id = uuid4()
+        user_id = uuid4()
 
         mock_production_repo = Mock()
         mock_doctor_repo = Mock()
@@ -32,6 +33,7 @@ class TestCreateProductionUseCase:
         mock_doctor_repo.get_by_id.return_value = Doctor(
             id=doctor_id,
             **sample_doctor_data,
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -40,6 +42,7 @@ class TestCreateProductionUseCase:
             id=hospital_id,
             name="Hospital Test",
             address="Test Address",
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -48,6 +51,7 @@ class TestCreateProductionUseCase:
             id=uuid4(),
             doctor_id=str(doctor_id),
             hospital_id=str(hospital_id),
+            user_id=user_id,
             type="shift",
             date=date(2024, 1, 15),
             description="Test",
@@ -70,7 +74,7 @@ class TestCreateProductionUseCase:
         )
 
         # Act
-        result = usecase.execute(dto)
+        result = usecase.execute(dto, user_id)
 
         # Assert
         assert result is not None
@@ -83,6 +87,7 @@ class TestCreateProductionUseCase:
         # Arrange
         doctor_id = uuid4()
         hospital_id = uuid4()
+        user_id = uuid4()
 
         mock_production_repo = Mock()
         mock_doctor_repo = Mock()
@@ -106,7 +111,7 @@ class TestCreateProductionUseCase:
 
         # Act & Assert
         with pytest.raises(ValueError) as exc_info:
-            usecase.execute(dto)
+            usecase.execute(dto, user_id)
 
         assert "Doctor not found" in str(exc_info.value)
 
@@ -115,6 +120,7 @@ class TestCreateProductionUseCase:
         # Arrange
         doctor_id = uuid4()
         hospital_id = uuid4()
+        user_id = uuid4()
 
         mock_production_repo = Mock()
         mock_doctor_repo = Mock()
@@ -123,6 +129,7 @@ class TestCreateProductionUseCase:
         mock_doctor_repo.get_by_id.return_value = Doctor(
             id=doctor_id,
             **sample_doctor_data,
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -145,7 +152,7 @@ class TestCreateProductionUseCase:
 
         # Act & Assert
         with pytest.raises(ValueError) as exc_info:
-            usecase.execute(dto)
+            usecase.execute(dto, user_id)
 
         assert "Hospital not found" in str(exc_info.value)
 
@@ -157,6 +164,7 @@ class TestCreateRepasseUseCase:
         """Test successful repasse creation"""
         # Arrange
         production_id = uuid4()
+        user_id = uuid4()
 
         mock_repasse_repo = Mock()
         mock_production_repo = Mock()
@@ -165,6 +173,7 @@ class TestCreateRepasseUseCase:
             id=production_id,
             doctor_id=uuid4(),
             hospital_id=uuid4(),
+            user_id=user_id,
             type="shift",
             date=date(2024, 1, 15),
             description="Test",
@@ -176,6 +185,7 @@ class TestCreateRepasseUseCase:
             id=uuid4(),
             production_id=production_id,
             amount=Decimal("1500.00"),
+            user_id=user_id,
             created_at="2024-01-01T00:00:00",
             updated_at=None
         )
@@ -191,7 +201,7 @@ class TestCreateRepasseUseCase:
         )
 
         # Act
-        result = usecase.execute(dto)
+        result = usecase.execute(dto, user_id)
 
         # Assert
         assert result is not None
@@ -203,6 +213,7 @@ class TestCreateRepasseUseCase:
         """Test repasse creation with non-existent production"""
         # Arrange
         production_id = uuid4()
+        user_id = uuid4()
 
         mock_repasse_repo = Mock()
         mock_production_repo = Mock()
@@ -221,7 +232,7 @@ class TestCreateRepasseUseCase:
 
         # Act & Assert
         with pytest.raises(HTTPException) as exc_info:
-            usecase.execute(dto)
+            usecase.execute(dto, user_id)
 
         assert exc_info.value.status_code == 404
         assert exc_info.value.detail == "Production not found"
