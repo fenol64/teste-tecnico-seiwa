@@ -14,6 +14,11 @@ App: https://test-tec-seiwa.fenol64.com.br/
 Repositório do Frontend:
 https://github.com/fenol64/teste-tecnico-seiwa-frontend
 
+**usuário ja com dados poupulados pela seed**
+
+email: admin@seiwa.com <br>
+senha: 123456
+
 ### Contexto
 
 A Seiwa integra dados financeiros de médicos a partir de sistemas hospitalares distintos. Um dos desafios é consolidar eventos financeiros, garantir consistência, performance e auditabilidade.
