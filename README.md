@@ -135,13 +135,5 @@ O projeto inclui stack completa de monitoramento:
   - Usuário: `admin`
   - Senha: `admin`
 
-Para acessar:
-```bash
-make prometheus  # Abre Prometheus
-make grafana     # Abre Grafana
-```
-
-Veja [MONITORING.md](MONITORING.md) para mais detalhes.
-
 
 
