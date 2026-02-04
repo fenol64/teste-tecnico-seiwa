@@ -39,7 +39,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    network_mode: "host"
+    networks:
+      - app-network
     restart: unless-stopped
 
   # Serviço pgAdmin (opcional, para gerenciamento do banco)
@@ -97,7 +98,7 @@ services:
 
 networks:
   app-network:
-    driver: host
+    driver: bridge
 
 volumes:
   postgres_data:
