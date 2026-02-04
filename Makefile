@@ -1,13 +1,13 @@
 all: up
 
 up:
-	docker-compose -f ops/docker-compose.yml up -d --build
+	docker compose -f ops/docker-compose.yml up -d --build
 
 down:
-	docker-compose -f ops/docker-compose.yml down
+	docker compose -f ops/docker-compose.yml down
 
 logs:
-	docker-compose -f ops/docker-compose.yml logs -f
+	docker compose -f ops/docker-compose.yml logs -f
 
 install:
 	pip install -r requirements.txt
@@ -23,7 +23,7 @@ clean:
 	find . -type f -name "*.pyc" -delete
 
 status:
-	docker-compose -f ops/docker-compose.yml ps
+	docker compose -f ops/docker-compose.yml ps
 
 run-migrations:
 	alembic upgrade head
